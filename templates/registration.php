@@ -104,14 +104,7 @@
                             <span>Перетащите фото сюда</span>
                         </div>
                     </div>
-<!--                    <button class="registration__input-file-button form__input-file-button button" type="button">-->
-<!--                        <span>Выбрать фото</span>-->
-<!--                        <svg class="registration__attach-icon form__attach-icon" width="10" height="20">-->
-<!--                            <use xlink:href="#icon-attach"></use>-->
-<!--                        </svg>-->
-<!--                    </button>-->
                 </div>
-<!--                <div class="registration__file form__file dropzone-previews"></div>-->
             </div>
             <button class="registration__submit button button--main" type="submit">Отправить</button>
         </form>
