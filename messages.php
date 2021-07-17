@@ -1,4 +1,5 @@
 <?php
+/* @var Closure $utils_url_to */
 
 require('init.php');
 require('helpers.php');
@@ -84,7 +85,8 @@ $page_content = include_template('messages.php', [
     'active_dialog' => $active_dialog,
     'user' => $user,
     'message_list' => $message_list,
-    'errors' => $errors
+    'errors' => $errors,
+    'to' => $utils_url_to
 ]);
 
 $page = include_template('layout.php', [

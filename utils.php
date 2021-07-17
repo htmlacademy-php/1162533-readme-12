@@ -3,7 +3,7 @@ define("SPACE_SYMBOL_COUNT", 1);
 define("ELLIPSIS_SYMBOL_COUNT", 3);
 
 /**
- * Возвращает дату в нужном формате
+ * Возвращает дату добавления записи в нужном формате
  * @param date $date
  * @return string
  */
@@ -62,6 +62,11 @@ function not_found_page($user_name)
     exit();
 }
 
+/**
+ * Возвращает количество времени на сайте в нужном формате
+ * @param date $date
+ * @return string
+ */
 function format_register_date($date)
 {
     date_default_timezone_set('Europe/Moscow');
@@ -94,31 +99,57 @@ function format_register_date($date)
             get_noun_plural_form($minutes, 'минуту', 'минуты', 'минут') . ' на сайте';
     } elseif ($minutes <= 0) {
         return 'новый пользователь';
-    } else {
-        return '';
     }
+
+    return '';
 };
 
+/**
+ * Возвращает количество подписчков  в нужном формате
+ * @param number $count
+ * @return string
+ */
 function get_text_count_followers($count)
 {
     return get_noun_plural_form($count, 'подписчик', 'подписчика', 'подписчиков');
 };
 
+/**
+ * Возвращает количество публикаций в нужном формате
+ * @param number $count
+ * @return string
+ */
 function get_text_count_publications($count)
 {
     return get_noun_plural_form($count, 'публикация', 'публикации', 'публикаций');
 };
 
+/**
+ * Возвращает количество просмотров в нужном формате
+ * @param number $count
+ * @return string
+ */
 function get_text_count_shown($count)
 {
     return $count . " " . get_noun_plural_form($count, 'просмотр', 'просмотра', 'просмотров');
 };
 
+/**
+ * Возвращает значение поля
+ * @param string $name
+ * @return string
+ */
 function get_post_val($name)
 {
-    return count($_POST) && $_POST[$name] ? htmlspecialchars($_POST[$name]) : '';
+    return !empty($_POST) && !empty($_POST[$name]) ? htmlspecialchars($_POST[$name]) : '';
 };
 
+/**
+ * Возвращает ссылку на загруженный файл, который был получен по ссылке
+ * @param string $file_url
+ * @param string $path
+ * @return string
+ */
 function upload_file($file_url, $path)
 {
     $image_content = file_get_contents($file_url);
@@ -134,6 +165,12 @@ function upload_file($file_url, $path)
     return $path .  $file_name;
 };
 
+/**
+ * Возвращает ссылку на загруженный файл
+ * @param array $file
+ * @param string $path
+ * @return string
+ */
 function save_image($file, $path)
 {
     $file_name = $file['name'];
@@ -148,168 +185,12 @@ function save_image($file, $path)
     return $path . $file_name;
 };
 
-
-function save_post($con, $post, $post_type_id, $user_id, $file_url = null)
-{
-    $data = [
-        'id' => null,
-        'date_add' => date('Y-m-d H:i:s'),
-        'title' => $post['post-heading'],
-        'content' => '',
-        'author' => null,
-        'shown_count' => 0,
-        'user_id' => $user_id,
-        'content_type_id' => $post_type_id
-    ];
-
-    switch ($post['active-tab']) {
-        case 'photo':
-            if ($file_url) {
-                $data['content'] = $file_url;
-            } else {
-                $data['content'] = $post['photo-url']['photo-url'];
-            }
-            break;
-
-        case 'video':
-            $data['content'] = $post['video-url'];
-            break;
-
-        case 'text':
-            $data['content'] = $post['post-text'];
-            break;
-
-        case 'quote':
-            $data['content'] = $post['cite-text'];
-            $data['author'] = $post['quote-author'];
-            break;
-
-        case 'link':
-            $data['content'] = $post['post-link'];
-            break;
-    }
-
-    $fields = [];
-    $data_for_query = [];
-    foreach ($data as $key => $item) {
-        $fields[] = "{$key} = ?";
-        array_push($data_for_query, $item);
-    }
-
-    $fields_for_query = implode(', ', $fields);
-    $sql = "INSERT INTO post SET {$fields_for_query}";
-    $stmt = db_get_prepare_stmt(
-        $con,
-        $sql,
-        $data_for_query);
-    mysqli_stmt_execute($stmt);
-    mysqli_stmt_get_result($stmt);
-    return mysqli_insert_id($con);
-};
-
-function save_tags($con, $hashtags, $post_id)
-{
-    $new_unique_hashtags = array_unique((explode(' ', htmlspecialchars($hashtags))));
-    $sql_hashtags_db = "SELECT * FROM hashtag";
-    $result_hashtags_db = mysqli_query($con, $sql_hashtags_db);
-    $hashtags_by_db = [];
-
-    if ($result_hashtags_db) {
-        $hashtags_by_db = mysqli_fetch_all($result_hashtags_db, MYSQLI_ASSOC);
-
-        foreach ($new_unique_hashtags as $hashtag) {
-            $hashtag_value = substr($hashtag, 1, strlen($hashtag));
-            $hashtag_id = null;
-            $repeat_hashtag_key = array_search($hashtag_value, array_column($hashtags_by_db, 'title'));
-
-            if ($repeat_hashtag_key) {
-                $hashtag_id = $hashtags_by_db[$repeat_hashtag_key]['id'];
-            } else {
-                $sql_hashtag_title = "INSERT INTO hashtag SET title = ?";
-                $stmt = db_get_prepare_stmt(
-                    $con,
-                    $sql_hashtag_title,
-                    [$hashtag_value]);
-                mysqli_stmt_execute($stmt);
-                mysqli_stmt_get_result($stmt);
-                $hashtag_id = mysqli_insert_id($con);
-            }
-
-            $sql_add_post_hashtag = "INSERT INTO posthashtag SET post_id = ?, hashtag_id = ?";
-            $stmt_post_hashtags = db_get_prepare_stmt(
-                $con,
-                $sql_add_post_hashtag,
-                [$post_id, $hashtag_id]);
-            mysqli_stmt_execute($stmt_post_hashtags);
-            mysqli_stmt_get_result($stmt_post_hashtags);
-        }
-    }
-};
-
-function check_email_in_db($con, $email) {
-    $sql = "SELECT id, email FROM user WHERE email = ?";
-    $stmt = db_get_prepare_stmt(
-        $con,
-        $sql,
-        [$email]);
-    mysqli_stmt_execute($stmt);
-    $result = mysqli_stmt_get_result($stmt);
-
-    if ($result && empty(mysqli_fetch_all($result, MYSQLI_ASSOC))) {
-        return true;
-    }
-
-    return false;
-};
-
-function register_user($con, $post, $file_url = null)
-{
-    $data = [
-        'id' => null,
-        'date_add' => date('Y-m-d H:i:s'),
-        'email' => $post['registration-email'],
-        'login' => $post['registration-login'],
-        'password' => password_hash($post['registration-password'], PASSWORD_DEFAULT),
-        'user_name' => null,
-        'avatar' => $file_url
-    ];
-
-    $fields = [];
-    $data_for_query = [];
-    foreach ($data as $key => $item) {
-        $fields[] = "{$key} = ?";
-        array_push($data_for_query, $item);
-    }
-
-    $fields_for_query = implode(', ', $fields);
-    $sql = "INSERT INTO user SET {$fields_for_query}";
-    $stmt = db_get_prepare_stmt(
-        $con,
-        $sql,
-        $data_for_query);
-    mysqli_stmt_execute($stmt);
-    mysqli_stmt_get_result($stmt);
-    return mysqli_insert_id($con);
-};
-
-function check_user_author_data($con, $email, $password)
-{
-    $sql = "SELECT id, email, password FROM user WHERE email = ?";
-    $stmt = db_get_prepare_stmt(
-        $con,
-        $sql,
-        [$email]);
-    mysqli_stmt_execute($stmt);
-    $result = mysqli_stmt_get_result($stmt);
-    $user_data = mysqli_fetch_all($result, MYSQLI_ASSOC);
-
-    if ($result && !empty($user_data) && password_verify($password, $user_data[0]['password'])) {
-        return true;
-    }
-
-    return false;
-};
-
+/**
+ * Обрезает строку и добавляет ссылку Читать далее, если ее длина превышает заданный лимит символов
+ * @param string $text
+ * @param int $count_symbols
+ * @return string
+ */
 function cut_text($text, $count_symbols = 300)
 {
     $word_list = explode(" ", $text);
@@ -334,19 +215,33 @@ function cut_text($text, $count_symbols = 300)
     return '<p>' . implode(' ', $new_word_list) . '</p>' . '<a class="post-text__more-link" href="#">Читать далее</a>';
 };
 
+/**
+ * Возвращает домен ссылки
+ * @param string $url
+ * @return string
+ */
 function get_domain($url)
 {
     return parse_url($url)['host'] ?? $url;
 };
 
+/**
+ * Возвращает ссылку на превью видео
+ * @param string $youtube_url
+ * @return string
+ */
 function get_youtube_video_miniature(string $youtube_url): string
 {
     $id = extract_youtube_id($youtube_url);
-    $src = 'http://img.youtube.com/vi/'.$id.'/0.jpg';
-
-    return $src;
+    return 'http://img.youtube.com/vi/'.$id.'/0.jpg';
 };
 
+/**
+ * Возвращает ссылку с заданными параметрами
+ * @param string $where
+ * @param array $get
+ * @return string
+ */
 $utils_url_to = function (string $where, array $get = []): string
 {
     $result = '/' . trim($where, '/') . '.php';
@@ -361,11 +256,14 @@ $utils_url_to = function (string $where, array $get = []): string
     return $result;
 };
 
-function check_liked_post($con, $post_id, $user): string
-{
-    return !empty(check_like($con, $user['id'], $post_id)) ? 'icon-heart-active' : 'icon-heart';
-};
-
+/**
+ * Отправляет уведомлениe о новом подписчике
+ * @param string $sender почта отправителя писем
+ * @param array $recipient массив с данными получателя
+ * @param array $follower массив с данными подписчика
+ * @param object $mailer Объект Swift_Mailer
+ * @return string
+ */
 function new_follower_notification($sender, $recipient, $follower, $mailer)
 {
     $site_name = 'Readme';
@@ -391,6 +289,15 @@ MESS;
     return $result;
 }
 
+/**
+ * Отправляет уведомления подписчикам о новом посте
+ * @param string $sender почта отправителя писем
+ * @param array $recipients массив с данными получателей
+ * @param array $author массив с данными автора поста
+ * @param string $post_title заголовок поста
+ * @param object $mailer Объект Swift_Mailer
+ * @return string
+ */
 function new_post_notification($sender, $recipients, $author, $post_title, $mailer)
 {
     $site_name = 'Readme';
@@ -412,8 +319,13 @@ MESS;
         $message->setBody($body, 'text/html');
         $mailer->send($message);
     }
-}
+};
 
+/**
+ * Вовзращает дату последнего полученного сообщения в заданном формате
+ * @param date $date дата сообщения
+ * @return string
+ */
 function get_message_sent_time($date) {
 
     if (!$date) {

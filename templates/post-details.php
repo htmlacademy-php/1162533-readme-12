@@ -184,7 +184,7 @@
                                     ]) ?>"
                                     class="user__button user__button--subscription button button--main">Подписаться</a>
                             <?php endif; ?>
-                            <a class="user__button user__button--writing button button--green" href="messages.php?user=<?= $author_info['id'] ?>">Сообщение</a>
+                            <a class="user__button user__button--writing button button--green" href="<?= $to('messages', ['user' => $author_info['id']]) ?>">Сообщение</a>
                         </div>
                     <?php endif; ?>
                 </div>

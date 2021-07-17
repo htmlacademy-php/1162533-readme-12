@@ -76,7 +76,7 @@ $popular_posts = get_popular_posts(
     $sort_direction,
     POPULAR_POSTS_LIMIT,
     $offset);
-$popular_posts_count = get_popular_posts_count($con, $active_type_content_id)['count'];
+$popular_posts_count = get_popular_posts_count($con, $active_type_content_id);
 
 $get_sort_link = function($sort) use ($active_type_content_id, $sort_type, $sort_direction, $utils_url_to) {
     $direction = $sort_type == $sort ? ($sort_direction === 'ASC' ? 'DESC' : 'ASC') : $sort_direction;

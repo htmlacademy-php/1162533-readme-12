@@ -10,20 +10,20 @@
                             <a
                                 class="messages__contacts-tab tabs__item
                                 <?= $active_dialog === $message_user['user_id'] ? 'messages__contacts-tab--active tabs__item--active' : '' ?>"
-                                href="/messages.php?user=<?= $message_user['user_id'] ?>">
+                                href="<?= $to('messages', ['user' => $message_user['user_id']]) ?>">
                                 <div class="messages__avatar-wrapper">
                                     <img class="messages__avatar" src="<?= $message_user['avatar'] ?>" alt="Аватар пользователя">
                                     <?php if($message_user['unreaded_messages_count']): ?>
-                                        <i class="messages__indicator"><?= $message_user['unreaded_messages_count'] ?></i>
+                                        <i class="messages__indicator"><?= htmlspecialchars($message_user['unreaded_messages_count']) ?></i>
                                     <?php endif; ?>
                                 </div>
                                 <div class="messages__info">
                                      <span class="messages__contact-name">
-                                        <?= $message_user['login'] ?>
+                                        <?= htmlspecialchars($message_user['login']) ?>
                                      </span>
                                     <div class="messages__preview">
                                         <p class="messages__preview-text">
-                                            <?= $message_user['content'] ?>
+                                            <?= htmlspecialchars($message_user['content']) ?>
                                         </p>
                                         <time class="messages__preview-time" datetime="<?= $message_user['last_message'] ?>">
                                             <?= get_message_sent_time($message_user['last_message']); ?>
@@ -45,13 +45,13 @@
                                 <li class="messages__item <?= $message['sender_id'] == $user['id'] ? 'messages__item--my' : '' ?>">
                                     <div class="messages__info-wrapper">
                                         <div class="messages__item-avatar">
-                                            <a class="messages__author-link" href="profile.php?user_id=<?= $message['sender_id'] ?>">
+                                            <a class="messages__author-link" href="<?= $to('profile', ['user_id' => $message['sender_id']]) ?>">
                                                 <img class="messages__avatar" src="<?= $message['avatar'] ?>" alt="Аватар пользователя">
                                             </a>
                                         </div>
                                         <div class="messages__item-info">
-                                            <a class="messages__author" href="#">
-                                                <?= $message['login'] ?>
+                                            <a class="messages__author" href="<?= $to('profile', ['user_id' => $message['sender_id']]) ?>">
+                                                <?= htmlspecialchars($message['login']) ?>
                                             </a>
                                             <time class="messages__time" datetime="<?= $message['date_add'] ?>">
                                                 <?= format_publication_date($message['date_add']) ?>
@@ -60,7 +60,7 @@
                                     </div>
 
                                     <p class="messages__text">
-                                        <?= $message['content'] ?>
+                                        <?= htmlspecialchars($message['content']) ?>
                                     </p>
                                 </li>
                             <?php endforeach; ?>
@@ -70,7 +70,10 @@
                     <?php endif; ?>
                 </div>
                 <div class="comments">
-                    <form class="comments__form form" action="messages.php?user=<?= $active_dialog ?>" method="post">
+                    <form
+                        class="comments__form form"
+                        action="<?= $to('messages', ['user' => $active_dialog]) ?>"
+                        method="post">
                         <input type="hidden" name="recipient_id" value="<?= $active_dialog ?>" />
                         <div class="comments__my-avatar">
                             <img class="comments__picture" src="<?= $user['avatar'] ?>" alt="Аватар пользователя">
