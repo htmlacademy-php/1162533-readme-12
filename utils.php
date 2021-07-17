@@ -31,7 +31,7 @@ function format_publication_date($date)
     } elseif ($days > 0) {
         return $days . ' ' .
             get_noun_plural_form($days, 'день', 'дня', 'дней') . ' назад';
-    } elseif ($hours > 0) {
+    } elseif ($minutes >= 60) {
         return $hours . ' ' .
             get_noun_plural_form($hours, 'час', 'часа', 'часов') . ' назад';
     } elseif ($minutes > 0) {
@@ -105,7 +105,7 @@ function format_register_date($date)
 };
 
 /**
- * Возвращает количество подписчков  в нужном формате
+ * Возвращает количество подписчиков  в нужном формате
  * @param number $count
  * @return string
  */

@@ -86,18 +86,23 @@
                         </ul>
                     <?php endif; ?>
                     <div class="comments">
-                        <form class="comments__form form" action="post.php" method="post">
+                        <form class="comments__form form" action="<?= $to('post', ['ID' => $post_id]) ?>" method="post">
                             <div class="comments__my-avatar">
                                 <img class="comments__picture" src="<?= $user['avatar'] ?>" alt="Аватар пользователя">
                             </div>
-                            <div class="form__input-section form__input-section--error">
+                            <div class="form__input-section <?= !empty($errors) && $errors['message'] ? 'form__input-section--error' : '' ?>">
+                                <input type="hidden" name="user" value="<?= $user['id'] ?>" />
+                                <input type="hidden" name="post" value="<?= $post_id ?>" />
                                 <textarea class="comments__textarea form__textarea form__input" name="message" placeholder="Ваш комментарий"></textarea>
                                 <label class="visually-hidden">Ваш комментарий</label>
-                                <button class="form__error-button button" type="button">!</button>
-                                <div class="form__error-text">
-                                    <h3 class="form__error-title">Ошибка валидации</h3>
-                                    <p class="form__error-desc">Это поле обязательно к заполнению</p>
-                                </div>
+
+                                <?php if(!empty($errors) && $errors['message']): ?>
+                                    <button class="form__error-button button" type="button">!</button>
+                                    <div class="form__error-text">
+                                        <h3 class="form__error-title">Ошибка валидации</h3>
+                                        <p class="form__error-desc"><?= $errors['message']['message'] ?></p>
+                                    </div>
+                                <?php endif; ?>
                             </div>
                             <button class="comments__submit button button--green" type="submit">Отправить</button>
                         </form>
@@ -116,7 +121,7 @@
                                                 <div class="comments__name-wrapper">
                                                     <a class="comments__user-name"
                                                        href="<?= $to('profile', ['user_id' => $comment['user_id']]) ?>">
-                                                        <span><?= $comment['author_name'] ?></span>
+                                                        <span><?= $comment['author_name'] ?? $comment['author_login'] ?></span>
                                                     </a>
                                                     <time class="comments__time" datetime="<?= $comment['date_add'] ?>"><?= format_publication_date($comment['date_add']) ?></time>
                                                 </div>
@@ -127,10 +132,15 @@
                                         </li>
                                     <?php endforeach; ?>
                                 </ul>
-                                <?php if(count($comments) > 2): ?>
-                                    <a class="comments__more-link" href="#">
+                                <?php if($comments_length > 2 && count($comments) <= 2): ?>
+                                    <a
+                                        class="comments__more-link"
+                                        href="<?= $to('post', [
+                                            'ID' => $post_id,
+                                            'show_comments' => ''
+                                        ]) ?>" >
                                         <span>Показать все комментарии</span>
-                                        <sup class="comments__amount"><?= count($comments) - 2 ?></sup>
+                                        <sup class="comments__amount"><?= $comments_length - 2 ?></sup>
                                     </a>
                                 <?php endif; ?>
                             </div>
