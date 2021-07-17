@@ -93,7 +93,24 @@
                                 <?php foreach ($user_posts as $post): ?>
                                     <article class="profile__post post <?= $post['content_type_title'] ?>">
                                         <header class="post__header">
+                                            <?php if($post['repost']): ?>
+                                            <div class="post__author">
+                                                <a class="post__author-link" href="<?= $to('profile', ['user_id' => $post['origin_author']]) ?>" title="Автор">
+                                                    <div class="post__avatar-wrapper post__avatar-wrapper--repost">
+                                                        <img class="post__author-avatar" src="<?= $post['origin_author_avatar'] ?>" alt="Аватар пользователя">
+                                                    </div>
+                                                    <div class="post__info">
+                                                        <b class="post__author-name">Репост: <?= $post['origin_author_post'] ?></b>
+                                                        <time
+                                                            class="post__time"
+                                                            datetime="<?= $post['date_add'] ?>"
+                                                        ><?= format_publication_date($post['date_add']) ?></time>
+                                                    </div>
+                                                </a>
+                                            </div>
+                                            <?php else: ?>
                                             <h2><a href="<?= $to('post', ['ID' => $post['id']]) ?>"><?= $post['title'] ?></a></h2>
+                                            <?php endif; ?>
                                         </header>
                                         <div class="post__main">
                                             <?php if($post['content_type_title'] === 'post-photo'): ?>
@@ -162,11 +179,14 @@
                                                         <span><?= $post['likes_count'] ?></span>
                                                         <span class="visually-hidden">количество лайков</span>
                                                     </a>
-                                                    <a class="post__indicator post__indicator--repost button" href="#" title="Репост">
+                                                    <a
+                                                        class="post__indicator post__indicator--repost button"
+                                                        href="<?= $to('repost', ['ID' => $post['id']]) ?>"
+                                                        title="Репост">
                                                         <svg class="post__indicator-icon" width="19" height="17">
                                                             <use xlink:href="#icon-repost"></use>
                                                         </svg>
-                                                        <span>5</span>
+                                                        <span><?= $post['reposts_count'] ?></span>
                                                         <span class="visually-hidden">количество репостов</span>
                                                     </a>
                                                 </div>

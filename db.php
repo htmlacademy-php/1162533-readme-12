@@ -147,9 +147,13 @@ SELECT
     p.author,
     p.shown_count,
     p.user_id,
+    p.repost,
+    p.origin_author,
+    p.content_type_id,
     c.class_name AS content_type_name,
     (SELECT COUNT(1) FROM likes WHERE likes.post_id = p.id) AS likes_count,
-    (SELECT COUNT(1) FROM comment WHERE comment.post_id = p.id) AS comments_count
+    (SELECT COUNT(1) FROM comment WHERE comment.post_id = p.id) AS comments_count,
+    (SELECT COUNT(post.id) FROM post WHERE post.origin_post = p.id) AS reposts_count
 FROM post p
 JOIN content_type c ON p.content_type_id = c.id
 WHERE p.id = ?";
@@ -277,7 +281,8 @@ SELECT
     c.class_name as type,
     p.date_add,
     (SELECT COUNT(1) FROM likes WHERE likes.post_id = p.id) AS likes_count,
-    (SELECT COUNT(1) FROM comment WHERE comment.post_id = p.id) AS comments_count
+    (SELECT COUNT(1) FROM comment WHERE comment.post_id = p.id) AS comments_count,
+    (SELECT COUNT(post.id) FROM post WHERE post.origin_post = p.id) AS reposts_count
 FROM post p
 JOIN user u ON p.user_id = u.id
 JOIN content_type c ON p.content_type_id =  c.id
@@ -370,9 +375,14 @@ ORDER BY p.date_add DESC";
  * @return array
  */
 function get_user_posts($con, $user_id) {
-    $sql = "SELECT post.*, content_type.class_name AS content_type_title,
-(SELECT COUNT(likes.id) FROM likes WHERE likes.post_id = post.id) AS likes_count
+    $sql = "SELECT post.*,
+content_type.class_name AS content_type_title,
+user.login as origin_author_post,
+user.avatar as origin_author_avatar,
+(SELECT COUNT(likes.id) FROM likes WHERE likes.post_id = post.id) AS likes_count,
+(SELECT COUNT(p.id) FROM post p WHERE p.origin_post = post.id) AS reposts_count
 FROM post
+LEFT JOIN user ON user.id = post.origin_author
 JOIN content_type ON content_type.id = post.content_type_id
 WHERE user_id = ?";
     $stmt = db_get_prepare_stmt(
@@ -926,4 +936,43 @@ function check_user_author_data($con, $email, $password)
 function check_liked_post($con, $post_id, $user): string
 {
     return !empty(check_like($con, $user['id'], $post_id)) ? 'icon-heart-active' : 'icon-heart';
+};
+
+
+/**
+ * Возвращает id добавленного репостнутого поста
+ * @param mysqli $con
+ * @param array $post данные поста
+ * @return int|string
+ */
+function save_repost_post($con, $post)
+{
+    $data = [
+        'title' => $post['title'],
+        'content' => $post['content'],
+        'author' => $post['author'],
+        'shown_count' => 0,
+        'user_id' => $post['user_id'],
+        'content_type_id' => $post['content_type_id'],
+        'repost' => $post['repost'],
+        'origin_author' => $post['origin_author'],
+        'origin_post' => $post['origin_post']
+    ];
+
+    $fields = [];
+    $data_for_query = [];
+    foreach ($data as $key => $item) {
+        $fields[] = "{$key} = ?";
+        array_push($data_for_query, $item);
+    }
+
+    $fields_for_query = implode(', ', $fields);
+    $sql = "INSERT INTO post SET {$fields_for_query}";
+    $stmt = db_get_prepare_stmt(
+        $con,
+        $sql,
+        $data_for_query);
+    mysqli_stmt_execute($stmt);
+    mysqli_stmt_get_result($stmt);
+    return mysqli_insert_id($con);
 };
