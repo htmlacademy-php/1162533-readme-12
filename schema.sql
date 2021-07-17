@@ -48,8 +48,9 @@ CREATE TABLE message (
     id INT AUTO_INCREMENT PRIMARY KEY,
     date_add TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     content TEXT,
-    user_id INT(11),
-    recipient_id INT(11)
+    sender_id INT(11),
+    recipient_id INT(11),
+    was_read BOOLEAN DEFAULT FALSE
 );
 
 CREATE TABLE hashtag (

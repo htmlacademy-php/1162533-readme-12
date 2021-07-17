@@ -547,7 +547,7 @@ function get_user_subscriptions($con, $user_id) {
 };
 
 function get_user_info($con, $user_id) {
-    $sql = "SELECT login, email FROM user WHERE id = ?";
+    $sql = "SELECT login, email, avatar FROM user WHERE id = ?";
     $stmt = db_get_prepare_stmt(
         $con,
         $sql,
@@ -581,4 +581,97 @@ WHERE user_id = ?";
     }
 
     return $followers;
+}
+
+function get_message_users($con, $user_id) {
+    $sql = "SELECT
+        user_id,
+        login,
+        avatar,
+        content,
+        sender_id,
+        last_message,
+        was_read,
+        (SELECT COUNT(id) AS messages_count
+        FROM message
+        WHERE was_read = 0 AND recipient_id = ? AND sender_id = user_id
+        GROUP BY sender_id) as unreaded_messages_count
+        FROM message
+        INNER JOIN (SELECT MAX(date_add) AS last_message,
+        IF(recipient_id = ?, sender_id, recipient_id) AS user_id
+        FROM message
+        WHERE sender_id = ? OR recipient_id = ?
+        GROUP BY user_id) grps
+        ON message.date_add = grps.last_message
+        INNER JOIN user
+        ON user.id = user_id
+        ORDER BY last_message DESC";
+
+    $stmt = db_get_prepare_stmt(
+        $con,
+        $sql,
+        [$user_id, $user_id, $user_id, $user_id]);
+    mysqli_stmt_execute($stmt);
+
+    $result = mysqli_stmt_get_result($stmt);
+    $messages = [];
+
+    if ($result) {
+        $messages = mysqli_fetch_all($result, MYSQLI_ASSOC);
+    }
+
+    return $messages;
+};
+
+
+function get_messages($con, $user_id, $owner_id) {
+    $sql = "SELECT message.*, avatar, login
+FROM message
+JOIN user ON user.id = message.sender_id
+WHERE (sender_id = ? AND recipient_id = ?) OR (sender_id = ? AND recipient_id = ?)";
+    $stmt = db_get_prepare_stmt(
+        $con,
+        $sql,
+        [$user_id, $owner_id, $owner_id, $user_id]);
+    mysqli_stmt_execute($stmt);
+
+    $result = mysqli_stmt_get_result($stmt);
+    $messages = [];
+
+    if ($result) {
+        $messages = mysqli_fetch_all($result, MYSQLI_ASSOC);
+    }
+
+    return $messages;
+};
+
+function send_message($con, $content, $sender_id, $recipient_id) {
+    $sql_user = "SELECT id from user WHERE id = ?";
+    $stmt_user = db_get_prepare_stmt(
+        $con,
+        $sql_user,
+        [$recipient_id]);
+    mysqli_stmt_execute($stmt_user);
+    $result_user = mysqli_stmt_get_result($stmt_user);
+    $user_id = $result_user ? mysqli_fetch_assoc($result_user) : null;
+
+    if($result_user && $user_id['id'] !== $sender_id) {
+        $sql = "INSERT INTO message SET content = ?, sender_id = ?, recipient_id = ?";
+        $stmt = db_get_prepare_stmt(
+            $con,
+            $sql,
+            [$content, $sender_id, $recipient_id]);
+        mysqli_stmt_execute($stmt);
+        mysqli_stmt_get_result($stmt);
+    }
+};
+
+function read_messages($con, $recipient_id, $sender_id) {
+    $sql = "UPDATE message SET was_read = 1 WHERE sender_id = ? AND recipient_id = ?";
+    $stmt = db_get_prepare_stmt(
+        $con,
+        $sql,
+        [$sender_id, $recipient_id]);
+    mysqli_stmt_execute($stmt);
+    mysqli_stmt_get_result($stmt);
 }

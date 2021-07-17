@@ -39,7 +39,7 @@
                                 'action' => 'remove'
                             ]) ?>"
                                class="profile__user-button user__button user__button--subscription button button--quartz">Отписаться</a>
-                            <a class="profile__user-button user__button user__button--writing button button--green" href="messages.html">Сообщение</a>
+                            <a class="profile__user-button user__button user__button--writing button button--green" href="messages.php?user=<?= $user_id ?>">Сообщение</a>
                         <?php else: ?>
                             <a href="<?= $to('subscription', [
                                 'user_id' => $user_id,

@@ -43,7 +43,7 @@ function validation_validate(array $form_validations, array $error_field_titles 
 };
 
 function validate_filled($name) {
-    if (empty($_POST[$name])) {
+    if (empty(trim($_POST[$name]))) {
         return validation_result(null, false, 'Это поле должно быть заполнено');
     }
 

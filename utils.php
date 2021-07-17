@@ -413,3 +413,15 @@ MESS;
         $mailer->send($message);
     }
 }
+
+function get_message_sent_time($date) {
+
+    if (!$date) {
+        return '';
+    }
+
+    date_default_timezone_set('Europe/Moscow');
+    $cur_date = date_create("now");
+    $diff = date_diff($cur_date, date_create($date))->days;
+    return $diff > 0 ? date_format(date_create($date), 'd F') : date_format(date_create($date), 'H:m');
+};
