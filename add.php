@@ -7,6 +7,7 @@ require('helpers.php');
 require('utils.php');
 require('validation-func.php');
 require('db.php');
+require('init-swift-mailer.php');
 
 init_check_auth('/');
 
@@ -206,6 +207,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         $post_type_id = $content_types[array_search($active_tab, array_column($content_types, 'title'))]['id'];
         $post_id = save_post($con, $values, $post_type_id, $user['id'], $file_url);
+
+        if($post_id) {
+            $follower_list = get_followers($con, $user['id']);
+
+            if(!empty($follower_list)) {
+                new_post_notification('keks@phpdemo.ru', $follower_list, $user, $_POST['post-heading'], $mailer);
+            }
+        }
+
         if (!empty($values['post-tags'])) {
             save_tags($con, $values['post-tags'], $post_id);
         }

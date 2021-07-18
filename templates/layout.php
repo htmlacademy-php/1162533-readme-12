@@ -57,7 +57,7 @@
                         <li class="header__my-page header__my-page--messages">
                             <a class="header__page-link
                             <?= $page_name && $page_name === 'messages' ? 'header__page-link--active' : '' ?>"
-                               href="messages.html" title="Личные сообщения">
+                               href="messages.php" title="Личные сообщения">
                                 <span class="visually-hidden">Личные сообщения</span>
                             </a>
                         </li>
@@ -86,7 +86,7 @@
                                             </a>
                                         </li>
                                         <li class="header__profile-nav-item">
-                                            <a class="header__profile-nav-link" href="#">
+                                            <a class="header__profile-nav-link" href="messages.php">
                           <span class="header__profile-nav-text">
                             Сообщения
                             <i class="header__profile-indicator">2</i>
@@ -131,8 +131,5 @@
     print(include_template('footer.php'));
 ?>
 
-<!--<script src="libs/dropzone.js"></script>-->
-<!--<script src="js/dropzone-settings.js"></script>-->
-<!--<script src="js/main.js"></script>-->
 </body>
 </html>

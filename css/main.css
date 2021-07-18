@@ -3185,7 +3185,11 @@ img {
 }
 
 .messages__avatar {
-  border-radius: 50%
+  border-radius: 50%;
+
+  width: 100%;
+  height: 100%;
+  object-fit: cover
 }
 
 .messages__contact-name {
@@ -3416,7 +3420,11 @@ img {
 }
 
 .comments__picture {
-  border-radius: 50%
+  border-radius: 50%;
+
+  width: 100%;
+  height: 100%;
+  object-fit: cover
 }
 
 .comments__my-avatar {
@@ -3989,6 +3997,11 @@ img {
   flex-direction: column
 }
 
+.user__avatar-link {
+  width: 100%;
+  height: 100%;
+}
+
 .user__avatar-link:focus, .user__avatar-link:hover {
   opacity: .7
 }
@@ -4048,7 +4061,11 @@ img {
 
 .user__picture {
   display: block;
-  border-radius: 50%
+  border-radius: 50%;
+
+  width: 100%;
+  height: 100%;
+  object-fit: cover
 }
 
 .user__rating {

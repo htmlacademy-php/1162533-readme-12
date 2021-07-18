@@ -1,0 +1,15 @@
+{
+    "name": "vesna/1162533-readme-12",
+    "description": "php",
+    "type": "project",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Olya Mosunova",
+            "email": "vesnushka.ol@mail.ru"
+        }
+    ],
+    "require": {
+        "swiftmailer/swiftmailer": "^6.2"
+    }
+}

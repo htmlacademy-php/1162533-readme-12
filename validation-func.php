@@ -42,14 +42,26 @@ function validation_validate(array $form_validations, array $error_field_titles 
     return ['errors' => $errors, 'values' => $values];
 };
 
+/**
+ * Run validation about field completion
+ *
+ * @param string $name
+ * @return array
+ */
 function validate_filled($name) {
-    if (empty($_POST[$name])) {
+    if (empty(trim($_POST[$name]))) {
         return validation_result(null, false, 'Это поле должно быть заполнено');
     }
 
     return validation_result($_POST[$name]);
 };
 
+/**
+ * Run validation hashtags
+ *
+ * @param string $name
+ * @return array
+ */
 function validate_hashtags($name) {
     if (empty($_POST[$name])) {
         return validation_result($_POST[$name]);
@@ -75,6 +87,13 @@ function validate_hashtags($name) {
     return validation_result($_POST[$name]);
 };
 
+/**
+ * Run validation uploaded photo OR photo link
+ *
+ * @param string $name
+ * @param string $file_field
+ * @return array
+ */
 function validate_upload_photo($name, $file_field) {
     $valid_image_types = ['image/png', 'image/jpeg', 'image/jpg', 'image/gif'];
 
@@ -96,6 +115,12 @@ function validate_upload_photo($name, $file_field) {
     return validation_result([$name => ($_POST[$name] ?? null), $file_field => ($_FILES[$file_field] ?? null)]);
 };
 
+/**
+ * Run validation url
+ *
+ * @param string $name
+ * @return array
+ */
 function validate_url($name) {
     if ($_POST[$name] && !filter_var($_POST[$name], FILTER_VALIDATE_URL)) {
         return validation_result(null, false, 'Значение поля должно быть корректным URL-адресом');
@@ -104,6 +129,12 @@ function validate_url($name) {
     return validation_result($_POST[$name]);
 };
 
+/**
+ * Run validation youtube url
+ *
+ * @param string $name
+ * @return array
+ */
 function validate_youtube($name) {
     $url = $_POST[$name];
     $id = extract_youtube_id($url);
@@ -125,6 +156,12 @@ function validate_youtube($name) {
     return validation_result($_POST[$name]);
 };
 
+/**
+ * Run validation uploaded photo
+ *
+ * @param string $name
+ * @return array
+ */
 function validate_photo($name) {
     if ($_FILES[$name] && $_FILES[$name]['error'] !== 4) {
         $file_type = $_FILES[$name]['type'];
@@ -141,6 +178,12 @@ function validate_photo($name) {
     return validation_result($_FILES[$name]);
 };
 
+/**
+ * Run validation email
+ *
+ * @param string $name
+ * @return array
+ */
 function validate_email($name) {
     if ($_POST[$name] && !filter_var($_POST[$name], FILTER_VALIDATE_EMAIL)) {
         return validation_result(null, false, 'Значение поля должно быть корректным email-адресом');
@@ -149,6 +192,13 @@ function validate_email($name) {
     return validation_result($_POST[$name]);
 };
 
+/**
+ * Run validation password repeat
+ *
+ * @param string $pass1
+ * @param string $pass2
+ * @return array
+ */
 function validate_passwords_repeat($pass1, $pass2) {
     if ($_POST[$pass1] !== $_POST[$pass2]) {
         return validation_result(null, false, 'Пароли не совпадают');
@@ -157,6 +207,12 @@ function validate_passwords_repeat($pass1, $pass2) {
     return validation_result($_POST[$pass1]);
 };
 
+/**
+ * Run validation password
+ *
+ * @param string $name
+ * @return array
+ */
 function validate_password($name) {
     if (strlen($_POST[$name]) < 5) {
         return validation_result(null, false, 'Пароль должен состоять не менее чем из 5 символов');
@@ -169,6 +225,13 @@ function validate_password($name) {
     return validation_result($_POST[$name]);
 };
 
+/**
+ * Run validation field length
+ *
+ * @param string $name
+ * @param number $length
+ * @return array
+ */
 function validate_length($name, $length) {
     if (strlen(trim($_POST[$name])) < $length) {
         return validation_result(null, false, 'Длина комментария должна быть больше четырех символов');
