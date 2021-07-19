@@ -87,10 +87,12 @@
                                         </li>
                                         <li class="header__profile-nav-item">
                                             <a class="header__profile-nav-link" href="messages.php">
-                          <span class="header__profile-nav-text">
-                            Сообщения
-                            <i class="header__profile-indicator">2</i>
-                          </span>
+                                              <span class="header__profile-nav-text">
+                                                Сообщения
+                                                  <?php if( $unreaded_dialogs_count > 0): ?>
+                                                    <i class="header__profile-indicator"><?= $unreaded_dialogs_count ?></i>
+                                                  <?php endif; ?>
+                                              </span>
                                             </a>
                                         </li>
 

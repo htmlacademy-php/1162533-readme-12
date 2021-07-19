@@ -32,6 +32,7 @@ $title = 'Readme: моя лента';
 $content_types = get_post_content_types($con);
 $active_type_content_id = $values['content_id'];
 $posts = get_posts_for_me($con, $user['id'], $active_type_content_id);
+$unreaded_dialogs_count = get_unreaded_messages_count($con, $user['id']);
 
 $check_is_liked_post = function($post_id) use ($con, $user)
 {
@@ -51,7 +52,8 @@ $page = include_template('layout.php', [
     'title' => $title,
     'user' => $user,
     'page_content' => $page_content,
-    'page_name' => $page_name
+    'page_name' => $page_name,
+    'unreaded_dialogs_count' => $unreaded_dialogs_count
 ]);
 
 print($page);

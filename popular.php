@@ -68,6 +68,7 @@ $page_name = 'popular';
 $title = 'readme: популярное';
 $content_types = get_post_content_types($con);
 $offset = ($page - 1) * POPULAR_POSTS_LIMIT;
+$unreaded_dialogs_count = get_unreaded_messages_count($con, $user['id']);
 
 $popular_posts = get_popular_posts(
     $con,
@@ -111,6 +112,7 @@ $page = include_template('layout.php', [
     'page_content' => $page_content,
     'user' => $user,
     'title' => $title,
-    'page_name' => $page_name
+    'page_name' => $page_name,
+    'unreaded_dialogs_count' => $unreaded_dialogs_count
 ]);
 print($page);

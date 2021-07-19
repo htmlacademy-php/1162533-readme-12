@@ -632,24 +632,24 @@ WHERE user_id = ?";
  */
 function get_message_users($con, $user_id) {
     $sql = "SELECT
-        user_id,
+        grps.user_id,
         login,
         avatar,
-        content,
-        sender_id,
-        last_message,
-        was_read,
+        m.content,
+        m.sender_id,
+        grps.last_message,
+        m.was_read,
         (SELECT COUNT(id) AS messages_count
         FROM message
         WHERE was_read = 0 AND recipient_id = ? AND sender_id = user_id
         GROUP BY sender_id) as unreaded_messages_count
-        FROM message
+        FROM message m
         INNER JOIN (SELECT MAX(date_add) AS last_message,
         IF(recipient_id = ?, sender_id, recipient_id) AS user_id
         FROM message
         WHERE sender_id = ? OR recipient_id = ?
         GROUP BY user_id) grps
-        ON message.date_add = grps.last_message
+        ON m.date_add = grps.last_message
         INNER JOIN user
         ON user.id = user_id
         ORDER BY last_message DESC";
@@ -662,6 +662,24 @@ function get_message_users($con, $user_id) {
     $result = mysqli_stmt_get_result($stmt);
 
     return $result ? mysqli_fetch_all($result, MYSQLI_ASSOC) : [];
+};
+
+/**
+ * Возвращает количество непрочитанных сообщений для конкретного получателя
+ * @param mysqli $con
+ * @param int $user_id айди пользователя (получатель)
+ * @return int
+ */
+function get_unreaded_messages_count($con, $user_id) {
+    $sql = "SELECT COUNT(message.id) AS messages_count FROM message WHERE recipient_id = ? AND was_read = 0";
+    $stmt = db_get_prepare_stmt(
+        $con,
+        $sql,
+        [$user_id]);
+    mysqli_stmt_execute($stmt);
+    $result = mysqli_stmt_get_result($stmt);
+
+    return $result ? mysqli_fetch_assoc($result)['messages_count'] : 0;
 };
 
 /**

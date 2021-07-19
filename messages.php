@@ -32,6 +32,7 @@ $title = 'readme: личные сообщения';
 $message_users = get_message_users($con, $user['id']);
 $active_dialog = $values['active_dialog'];
 $message_list = get_messages($con, $active_dialog, $user['id']);
+$unreaded_dialogs_count = get_unreaded_messages_count($con, $user['id']);
 
 $check_current_user = array_search($active_dialog, array_column($message_users, 'user_id'));
 
@@ -92,6 +93,7 @@ $page_content = include_template('messages.php', [
 $page = include_template('layout.php', [
     'page_content' => $page_content,
     'user' => $user,
-    'title' => $title
+    'title' => $title,
+    'unreaded_dialogs_count' => $unreaded_dialogs_count
 ]);
 print($page);
