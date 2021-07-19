@@ -2,15 +2,15 @@
 require('init.php');
 require('helpers.php');
 require('db.php');
+require('utils.php');
 
 $con = get_db_connection();
-$path = $_SERVER['HTTP_REFERER'];
 
 if (!empty($_GET) &&
     !empty($_GET['post_id']) &&
     !empty($_GET['user_id'])) {
     if (change_likes($con, $_GET)) {
-        header("Location: $path");
+        init_redirect_to_referer();
     } else {
         print_r('Не получилось произвести действия с лайками');
     }

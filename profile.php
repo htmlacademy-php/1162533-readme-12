@@ -107,6 +107,7 @@ $user_posts = get_user_posts($con, $user_id);
 $likes_list = get_likes_list($con, $user_id);
 $subscriptions_list = get_user_subscriptions($con ,$user_id);
 $error_post_comment = 0;
+$unreaded_dialogs_count = get_unreaded_messages_count($con, $user['id']);
 
 $post_hashtags = function($post_id) use($con)
 {
@@ -229,6 +230,7 @@ $page_content = include_template('profile/profile.php', [
 $page = include_template('layout.php', [
     'page_content' => $page_content,
     'user' => $user,
-    'title' => $title
+    'title' => $title,
+    'unreaded_dialogs_count' => $unreaded_dialogs_count
 ]);
 print($page);

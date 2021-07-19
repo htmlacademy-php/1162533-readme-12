@@ -23,8 +23,7 @@ CREATE TABLE post (
     content_type_id INT(11),
     repost BOOLEAN DEFAULT 0,
     origin_author INT(11) DEFAULT NULL,
-    origin_post INT(11) DEFAULT NULL,
-
+    origin_post INT(11) DEFAULT NULL
 );
 
 CREATE TABLE comment (

@@ -6,7 +6,6 @@ require('utils.php');
 require('init-swift-mailer.php');
 
 $con = get_db_connection();
-$path = $_SERVER['HTTP_REFERER'];
 $user = init_get_user();
 
 if (!empty($_GET) &&
@@ -16,10 +15,10 @@ if (!empty($_GET) &&
 
     if (change_subscription($con, $_GET)) {
         $recipient_info = get_user_info($con, $_GET['user_id']);
-        new_follower_notification('keks@phpdemo.ru', $recipient_info, $user, $mailer);
+        new_follower_notification('readme1162533@mail.ru', $recipient_info, $user, $mailer);
     }
 }
 
-header("Location: $path");
+init_redirect_to_referer();
 
 

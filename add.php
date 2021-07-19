@@ -37,6 +37,7 @@ $user = init_get_user();
 $title = 'readme: добавление публикации';
 $content_types = get_post_content_types($con);
 $active_tab = $values_parameters['active-tab'];
+$unreaded_dialogs_count = get_unreaded_messages_count($con, $user['id']);
 
 $post_tabs = [
     'photo' => 'фото',
@@ -212,7 +213,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $follower_list = get_followers($con, $user['id']);
 
             if(!empty($follower_list)) {
-                new_post_notification('keks@phpdemo.ru', $follower_list, $user, $_POST['post-heading'], $mailer);
+                new_post_notification('readme1162533@mail.ru', $follower_list, $user, $_POST['post-heading'], $mailer);
             }
         }
 
@@ -252,7 +253,8 @@ $page_content = include_template('adding-post.php', [
 $page = include_template('layout.php', [
     'page_content' => $page_content,
     'title' => $title,
-    'user' => $user
+    'user' => $user,
+    'unreaded_dialogs_count' => $unreaded_dialogs_count
 ]);
 
 print($page);

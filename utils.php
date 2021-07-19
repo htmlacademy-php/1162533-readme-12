@@ -39,22 +39,24 @@ function format_publication_date($date)
             get_noun_plural_form($minutes, 'минуту', 'минуты', 'минут') . ' назад';
     } elseif ($minutes <= 0) {
         return 'только что';
-    } else {
-        return '';
     }
+
+    return '';
 };
 
 /**
  * Возвращает страницу "не найдено"
  * @param string $user_name
+ * @param string $unreaded_dialogs_count
  */
-function not_found_page($user_name)
+function not_found_page($user_name, $unreaded_dialogs_count)
 {
     $page_content = include_template('not-found-page.php');
     $page = include_template('layout.php', [
         'page_content' => $page_content,
         'user_name' => $user_name,
         'title' => 'readme: страница не найдена',
+        'unreaded_dialogs_count' => $unreaded_dialogs_count
     ]);
 
     print($page);
@@ -262,7 +264,7 @@ $utils_url_to = function (string $where, array $get = []): string
  * @param array $recipient массив с данными получателя
  * @param array $follower массив с данными подписчика
  * @param object $mailer Объект Swift_Mailer
- * @return string
+ * @return string|int
  */
 function new_follower_notification($sender, $recipient, $follower, $mailer)
 {
@@ -284,7 +286,12 @@ MESS;
 
     $message->setTo($recipient['email']);
     $message->setBody($body, 'text/html');
-    $result = $mailer->send($message);
+
+    try {
+        $result = $mailer->send($message);
+    } catch (Exception $e) {
+        $result = 0;
+    }
 
     return $result;
 }
@@ -296,7 +303,7 @@ MESS;
  * @param array $author массив с данными автора поста
  * @param string $post_title заголовок поста
  * @param object $mailer Объект Swift_Mailer
- * @return string
+ * @return string|int
  */
 function new_post_notification($sender, $recipients, $author, $post_title, $mailer)
 {
@@ -317,7 +324,14 @@ MESS;
 
         $message->setTo($recipient['email']);
         $message->setBody($body, 'text/html');
-        $mailer->send($message);
+
+        try {
+            $result = $mailer->send($message);
+        } catch (Exception $e) {
+            $result = 0;
+        }
+
+        return $result;
     }
 };
 
@@ -337,3 +351,11 @@ function get_message_sent_time($date) {
     $diff = date_diff($cur_date, date_create($date))->days;
     return $diff > 0 ? date_format(date_create($date), 'd F') : date_format(date_create($date), 'H:m');
 };
+
+/**
+ * Redirect browser to same page
+ */
+function init_redirect_to_referer()
+{
+    init_redirect($_SERVER['HTTP_REFERER'] ?? '/');
+}
