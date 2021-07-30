@@ -118,7 +118,7 @@
                                                     <img src="<?= $post['content'] ?>" alt="Фото от пользователя" width="760" height="396">
                                                 </div>
                                             <?php elseif($post['content_type_title'] === 'post-text'): ?>
-                                                <?= cut_text(htmlspecialchars($post['content'])) ?>
+                                                <?= cut_text(htmlspecialchars($post['content']), $to('post', ['ID' => $post['id']])) ?>
                                             <?php elseif($post['content_type_title'] === 'post-video'): ?>
                                                 <div class="post-video__block">
                                                     <div class="post-video__preview">

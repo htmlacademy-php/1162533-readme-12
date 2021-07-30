@@ -193,7 +193,7 @@ function save_image($file, $path)
  * @param int $count_symbols
  * @return string
  */
-function cut_text($text, $count_symbols = 300)
+function cut_text($text, $url_to, $count_symbols = 300)
 {
     $word_list = explode(" ", $text);
     $symbols_sum = 0;
@@ -214,7 +214,7 @@ function cut_text($text, $count_symbols = 300)
         $new_word_list[] = $word;
     }
 
-    return '<p>' . implode(' ', $new_word_list) . '</p>' . '<a class="post-text__more-link" href="#">Читать далее</a>';
+    return '<p>' . implode(' ', $new_word_list) . '</p>' . '<a class="post-text__more-link" href="' . $url_to . '">Читать далее</a>';
 };
 
 /**
@@ -359,3 +359,18 @@ function init_redirect_to_referer()
 {
     init_redirect($_SERVER['HTTP_REFERER'] ?? '/');
 }
+
+
+/**
+ * Создает транспорт сообщений
+ * @return object
+ */
+function create_transport_messages() {
+    $transport = (new Swift_SmtpTransport('smtp.mail.ru', 465))
+        ->setUsername('readme1162533@mail.ru')
+        ->setPassword('22tYrpRIupM^')
+        ->setEncryption('SSL')
+    ;
+
+    return new Swift_Mailer($transport);
+};

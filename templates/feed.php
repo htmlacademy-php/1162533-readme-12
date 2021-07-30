@@ -33,7 +33,7 @@
                                     </div>
                                 <?php elseif($post['type'] === 'post-text'): ?>
                                     <h2><a href="<?= $to('post', ['ID' => $post['id']]) ?>"><?= $post['title'] ?></a></h2>
-                                    <?= cut_text(htmlspecialchars($post['content'])) ?>
+                                    <?= cut_text(htmlspecialchars($post['content']), $to('post', ['ID' => $post['id']])) ?>
                                 <?php elseif($post['type'] === 'post-video'): ?>
                                     <div class="post-video__block">
                                         <div class="post-video__preview">

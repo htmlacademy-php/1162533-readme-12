@@ -2,12 +2,11 @@
 /* @var Closure $utils_url_to */
 /* @var Closure $get_tabs_link */
 
-require('init.php');
-require('helpers.php');
-require('utils.php');
-require('validation-func.php');
-require('db.php');
-require('init-swift-mailer.php');
+require('src/init.php');
+require('src/helpers.php');
+require('src/utils.php');
+require('src/validation-func.php');
+require('src/db.php');
 
 init_check_auth('/');
 
@@ -35,6 +34,7 @@ $values_parameters = $validation_parameters_result['values'];
 $con = get_db_connection();
 $user = init_get_user();
 $title = 'readme: добавление публикации';
+$mailer = create_transport_messages();
 $content_types = get_post_content_types($con);
 $active_tab = $values_parameters['active-tab'];
 $unreaded_dialogs_count = get_unreaded_messages_count($con, $user['id']);

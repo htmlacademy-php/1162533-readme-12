@@ -1,8 +1,8 @@
 <?php
-require('init.php');
-require('helpers.php');
-require('db.php');
-require('utils.php');
+require('src/init.php');
+require('src/helpers.php');
+require('src/db.php');
+require('src/utils.php');
 
 $con = get_db_connection();
 

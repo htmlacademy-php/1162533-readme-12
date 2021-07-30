@@ -1,4 +1,4 @@
 <?php
-require('init.php');
+require('src/init.php');
 
 init_logout('/');

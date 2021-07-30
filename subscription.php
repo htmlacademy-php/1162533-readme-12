@@ -1,12 +1,12 @@
 <?php
-require('init.php');
-require('helpers.php');
-require('db.php');
-require('utils.php');
-require('init-swift-mailer.php');
+require('src/init.php');
+require('src/helpers.php');
+require('src/db.php');
+require('src/utils.php');
 
 $con = get_db_connection();
 $user = init_get_user();
+$mailer = create_transport_messages();
 
 if (!empty($_GET) &&
     !empty($_GET['user_id']) &&

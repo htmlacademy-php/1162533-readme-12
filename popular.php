@@ -4,11 +4,11 @@
 
 define("POPULAR_POSTS_LIMIT", 9);
 
-require('init.php');
-require('helpers.php');
-require('utils.php');
-require('validation-func.php');
-require('db.php');
+require('src/init.php');
+require('src/helpers.php');
+require('src/utils.php');
+require('src/validation-func.php');
+require('src/db.php');
 
 init_check_auth('/');
 

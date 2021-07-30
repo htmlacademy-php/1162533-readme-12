@@ -116,7 +116,7 @@
                                 </a>
                             </div>
                         <?php else: ?>
-                            <?= cut_text(htmlspecialchars($post['content'])) ?>
+                            <?= cut_text(htmlspecialchars($post['content']), $to('post', ['ID' => $post['id']])) ?>
                         <?php endif; ?>
 
                     </div>
