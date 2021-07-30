@@ -1,11 +1,11 @@
 <?php
 /* @var Closure $utils_url_to */
 
-require('init.php');
-require('db.php');
-require('helpers.php');
-require('utils.php');
-require('validation-func.php');
+require('src/init.php');
+require('src/db.php');
+require('src/helpers.php');
+require('src/utils.php');
+require('src/validation-func.php');
 
 init_check_auth('/');
 

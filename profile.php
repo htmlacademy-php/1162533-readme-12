@@ -6,11 +6,11 @@
 /* @var Closure $check_is_liked_post */
 /* @var Closure $check_subs */
 
-require('init.php');
-require('helpers.php');
-require('db.php');
-require('utils.php');
-require('validation-func.php');
+require('src/init.php');
+require('src/helpers.php');
+require('src/db.php');
+require('src/utils.php');
+require('src/validation-func.php');
 
 init_check_auth('/');
 
