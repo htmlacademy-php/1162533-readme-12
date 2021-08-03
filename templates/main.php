@@ -41,19 +41,19 @@
                 <ul class="popular__filters-list filters__list">
                     <?php foreach ($content_types as $key => $type): ?>
                         <li
-                            class="popular__filters-item filters__item
+                                class="popular__filters-item filters__item
                                    <?= $type['title'] == 'all' ? 'popular__filters-item--all filters__item--all' : '' ?>">
                             <a
-                                class="filters__button filters__button--<?= $type['title'] ?>
+                                    class="filters__button filters__button--<?= $type['title'] ?>
                                 <?= $type['title'] == 'all' ? 'filters__button--ellipse' : '' ?>
                                 <?= $active_type_content_id == $type['id'] ||
-                                (!$active_type_content_id && $type['title'] == 'all')? 'filters__button--active' : '' ?>
+                                    (!$active_type_content_id && $type['title'] == 'all') ? 'filters__button--active' : '' ?>
                                 button"
-                                href="<?= $to('popular', [
-                                    'content_id' => $type['id'],
-                                    'sort_type' => $sort_type,
-                                    'sort_direction' => $sort_direction
-                                ]) ?>">
+                                    href="<?= $to('popular', [
+                                        'content_id' => $type['id'],
+                                        'sort_type' => $sort_type,
+                                        'sort_direction' => $sort_direction
+                                    ]) ?>">
 
                                 <?php if ($type['title'] !== 'all'): ?>
                                     <span class="visually-hidden"><?= $type['label'] ?></span>
@@ -74,7 +74,8 @@
                 <article class="popular__post post <?= $post['type'] ?>">
                     <header class="post__header">
                         <h2>
-                            <a href="<?= $to('post', ['ID' => $post['id']]) ?>"><?= htmlspecialchars($post['title']) ?></a>
+                            <a href="<?= $to('post',
+                                ['ID' => $post['id']]) ?>"><?= htmlspecialchars($post['title']) ?></a>
                         </h2>
                     </header>
                     <div class="post__main">
@@ -87,10 +88,12 @@
                             </blockquote>
                         <?php elseif ($post['type'] == 'post-link'): ?>
                             <div class="post-link__wrapper">
-                                <a class="post-link__external" href="<?= htmlspecialchars($post['content']) ?>" title="Перейти по ссылке">
+                                <a class="post-link__external" href="<?= htmlspecialchars($post['content']) ?>"
+                                   title="Перейти по ссылке">
                                     <div class="post-link__info-wrapper">
                                         <div class="post-link__icon-wrapper">
-                                            <img src="https://www.google.com/s2/favicons?domain=vitadental.ru" alt="Иконка">
+                                            <img src="https://www.google.com/s2/favicons?domain=vitadental.ru"
+                                                 alt="Иконка">
                                         </div>
                                         <div class="post-link__info">
                                             <h3><?= htmlspecialchars($post['title']) ?></h3>
@@ -101,12 +104,13 @@
                             </div>
                         <?php elseif ($post['type'] == 'post-photo'): ?>
                             <div class="post-photo__image-wrapper">
-                                <img src="<?= htmlspecialchars($post['content']) ?>" alt="Фото от пользователя" width="360" height="240">
+                                <img src="<?= htmlspecialchars($post['content']) ?>" alt="Фото от пользователя"
+                                     width="360" height="240">
                             </div>
                         <?php elseif ($post['type'] == 'post-video'): ?>
                             <div class="post-video__block">
                                 <div class="post-video__preview">
-                                    <?=embed_youtube_cover(htmlspecialchars($post['content'])); ?>
+                                    <?= embed_youtube_cover(htmlspecialchars($post['content'])); ?>
                                 </div>
                                 <a href="<?= $post['content'] ?>" class="post-video__play-big button">
                                     <svg class="post-video__play-big-icon" width="14" height="14">
@@ -126,7 +130,8 @@
                                href="<?= $to('profile', ['user_id' => $post['user_id']]) ?>"
                                title="Автор">
                                 <div class="post__avatar-wrapper">
-                                    <img class="post__author-avatar" src="<?= $post['avatar'] ?>" alt="Аватар пользователя">
+                                    <img class="post__author-avatar" src="<?= $post['avatar'] ?>"
+                                         alt="Аватар пользователя">
                                 </div>
                                 <div class="post__info">
                                     <b class="post__author-name"><?= $post['user_name'] ?? $post['login'] ?></b>
@@ -166,9 +171,9 @@
                 </article>
             <?php endforeach; ?>
         </div>
-        <?php if($popular_posts_count > $limit): ?>
+        <?php if ($popular_posts_count > $limit): ?>
             <div class="popular__page-links">
-                <?php if($page > 1): ?>
+                <?php if ($page > 1): ?>
                     <a class="popular__page-link popular__page-link--prev button button--gray"
                        href="<?= $to('popular', [
                            'content_id' => $active_type_content_id,
@@ -181,7 +186,7 @@
                     <span class="popular__page-link popular__page-link--prev button button--gray">Предыдущая страница</span>
                 <?php endif; ?>
 
-                <?php if(($popular_posts_count / $limit) > $page): ?>
+                <?php if (($popular_posts_count / $limit) > $page): ?>
                     <a class="popular__page-link popular__page-link--next button button--gray"
                        href="<?= $to('popular', [
                            'content_id' => $active_type_content_id,

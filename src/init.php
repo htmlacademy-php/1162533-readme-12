@@ -15,7 +15,9 @@ function init_login(array $user_data, string $address): void
     $_SESSION['id'] = $user_data['id'];
 
     init_redirect($address);
-};
+}
+
+;
 
 /**
  * Что бы уменьшить вероятность конфликта в данных сессии лучше работать с конкретными параметрами
@@ -24,12 +26,16 @@ function init_logout(string $address): void
 {
     unset($_SESSION['is_auth'], $_SESSION['user_name'], $_SESSION['avatar'], $_SESSION['id']);
     init_redirect($address);
-};
+}
+
+;
 
 function init_is_auth(): bool
 {
     return !empty($_SESSION['is_auth'] ?? null);
-};
+}
+
+;
 
 /**
  * @param string $address
@@ -40,7 +46,9 @@ function init_check_auth(string $address = null): void
     if (!init_is_auth()) {
         init_redirect($address);
     }
-};
+}
+
+;
 
 /**
  * @param string $address
@@ -51,7 +59,9 @@ function init_check_not_auth(string $address): void
     if (init_is_auth()) {
         init_redirect($address);
     }
-};
+}
+
+;
 
 /**
  * @param string $address
@@ -61,7 +71,9 @@ function init_redirect(string $address): void
 {
     header("Location: $address");
     die();
-};
+}
+
+;
 
 /**
  * @return array

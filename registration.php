@@ -15,11 +15,11 @@ $form_validations = [
         0 => function ($name) {
             return validate_filled($name);
         },
-        1 => function($name) {
+        1 => function ($name) {
             return validate_email($name);
         },
         2 => function ($name) use ($con) {
-            if (! check_email_in_db($con, $_POST[$name])) {
+            if (!check_email_in_db($con, $_POST[$name])) {
                 return validation_result(null, false, 'Данный email уже используется другим пользователем');
             }
             return validation_result($_POST[$name]);
@@ -42,12 +42,12 @@ $form_validations = [
         0 => function ($name) {
             return validate_filled($name);
         },
-        1 => function($name) {
+        1 => function ($name) {
             return validate_passwords_repeat('registration-password', $name);
         }
     ],
     'userpic-file' => [
-        0 => function($name) {
+        0 => function ($name) {
             return validate_photo($name);
         },
         1 => function ($name) {

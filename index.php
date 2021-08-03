@@ -15,11 +15,17 @@ $form_validations = [
         0 => function ($name) {
             return validate_filled($name);
         },
-        1 => function ($name) use ($con) {
+        2 => function ($name) {
+            return validate_email($name);
+        },
+        3 => function ($name) use ($con) {
             if (!empty($_POST[$name]) && !empty($_POST['password'])) {
-                if (!check_user_author_data($con, $_POST[$name], $_POST['password'])) {
-                    return validation_result(null, false, 'Вы ввели неверный email/пароль.');
+                if (!check_user_email($con, $_POST[$name])) {
+                    return validation_result(null, false, 'Пользователь с таким email не существует.');
+                } elseif (!check_user_author_data($con, $_POST[$name], $_POST['password'])) {
+                    return validation_result(null, false, 'Вы ввели неверный пароль.', 'password');
                 }
+
                 return validation_result($_POST[$name]);
             }
             return validation_result($_POST[$name]);

@@ -2,9 +2,9 @@
     <div class="post__main">
         <blockquote>
             <p>
-                <?=$text;?>
+                <?= $text; ?>
             </p>
-            <cite><?=$author;?></cite>
+            <cite><?= $author; ?></cite>
         </blockquote>
     </div>
 </div>

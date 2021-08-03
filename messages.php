@@ -11,7 +11,7 @@ init_check_auth('/');
 
 $validations = [
     'active_dialog' => [
-        function ($name) {
+        function () {
             $value = filter_input(INPUT_GET, 'user', FILTER_VALIDATE_INT);
 
             if (!$value) {
@@ -36,7 +36,7 @@ $unreaded_dialogs_count = get_unreaded_messages_count($con, $user['id']);
 
 $check_current_user = array_search($active_dialog, array_column($message_users, 'user_id'));
 
-if($active_dialog && $check_current_user === false) {
+if ($active_dialog && $check_current_user === false) {
     $active_user_data = get_user_info($con, $active_dialog);
 
     $message_users[] = [
@@ -65,7 +65,7 @@ $error_field_titles = [
 
 $errors = [];
 
-if($active_dialog) {
+if ($active_dialog) {
     read_messages($con, $user['id'], $active_dialog);
 }
 

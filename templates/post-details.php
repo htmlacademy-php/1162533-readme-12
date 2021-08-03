@@ -5,27 +5,27 @@
             <h2 class="visually-hidden">Публикация</h2>
             <div class="post-details__wrapper post-photo">
                 <div class="post-details__main-block post post--details">
-                    <?php if($post['content_type_name'] == 'post-text'): ?>
+                    <?php if ($post['content_type_name'] == 'post-text'): ?>
                         <?php
-                            print(include_template('posts/post-text.php', [
-                                'text' => $post['content']
-                            ]))
+                        print(include_template('posts/post-text.php', [
+                            'text' => $post['content']
+                        ]))
                         ?>
 
                     <?php elseif ($post['content_type_name'] == 'post-quote'): ?>
                         <?php
-                            print(include_template('posts/post-quote.php', [
-                                'text' => $post['content'],
-                                'author' => $post['author'],
-                            ]))
+                        print(include_template('posts/post-quote.php', [
+                            'text' => $post['content'],
+                            'author' => $post['author'],
+                        ]))
                         ?>
 
                     <?php elseif ($post['content_type_name'] == 'post-link'): ?>
                         <?php
-                            print(include_template('posts/post-link.php', [
-                                'title' => $post['title'],
-                                'url' => $post['content'],
-                            ]))
+                        print(include_template('posts/post-link.php', [
+                            'title' => $post['title'],
+                            'url' => $post['content'],
+                        ]))
                         ?>
 
                     <?php elseif ($post['content_type_name'] == 'post-photo'): ?>
@@ -64,7 +64,8 @@
                                 <span><?= $post['comments_count'] ?></span>
                                 <span class="visually-hidden">количество комментариев</span>
                             </a>
-                            <a class="post__indicator post__indicator--repost button" href="<?= $to('repost', ['ID' => $post['id']]) ?>" title="Репост">
+                            <a class="post__indicator post__indicator--repost button"
+                               href="<?= $to('repost', ['ID' => $post['id']]) ?>" title="Репост">
                                 <svg class="post__indicator-icon" width="19" height="17">
                                     <use xlink:href="#icon-repost"></use>
                                 </svg>
@@ -79,7 +80,7 @@
                             <?php foreach ($hashtags as $key => $hashtag): ?>
                                 <li>
                                     <a
-                                        href="<?= $to('search', ['search' => '%23' . $hashtag['title']]) ?>"
+                                            href="<?= $to('search', ['search' => '%23' . $hashtag['title']]) ?>"
                                     >#<?= $hashtag['title'] ?></a>
                                 </li>
                             <?php endforeach; ?>
@@ -91,12 +92,13 @@
                                 <img class="comments__picture" src="<?= $user['avatar'] ?>" alt="Аватар пользователя">
                             </div>
                             <div class="form__input-section <?= !empty($errors) && $errors['message'] ? 'form__input-section--error' : '' ?>">
-                                <input type="hidden" name="user" value="<?= $user['id'] ?>" />
-                                <input type="hidden" name="post" value="<?= $post_id ?>" />
-                                <textarea class="comments__textarea form__textarea form__input" name="message" placeholder="Ваш комментарий"></textarea>
+                                <input type="hidden" name="user" value="<?= $user['id'] ?>"/>
+                                <input type="hidden" name="post" value="<?= $post_id ?>"/>
+                                <textarea class="comments__textarea form__textarea form__input" name="message"
+                                          placeholder="Ваш комментарий"></textarea>
                                 <label class="visually-hidden">Ваш комментарий</label>
 
-                                <?php if(!empty($errors) && $errors['message']): ?>
+                                <?php if (!empty($errors) && $errors['message']): ?>
                                     <button class="form__error-button button" type="button">!</button>
                                     <div class="form__error-text">
                                         <h3 class="form__error-title">Ошибка валидации</h3>
@@ -114,7 +116,9 @@
                                             <div class="comments__avatar">
                                                 <a class="user__avatar-link"
                                                    href="<?= $to('profile', ['user_id' => $comment['user_id']]) ?>">
-                                                    <img class="comments__picture" src="<?= $comment['author_avatar'] ?>" alt="Аватар пользователя">
+                                                    <img class="comments__picture"
+                                                         src="<?= $comment['author_avatar'] ?>"
+                                                         alt="Аватар пользователя">
                                                 </a>
                                             </div>
                                             <div class="comments__info">
@@ -123,7 +127,8 @@
                                                        href="<?= $to('profile', ['user_id' => $comment['user_id']]) ?>">
                                                         <span><?= $comment['author_name'] ?? $comment['author_login'] ?></span>
                                                     </a>
-                                                    <time class="comments__time" datetime="<?= $comment['date_add'] ?>"><?= format_publication_date($comment['date_add']) ?></time>
+                                                    <time class="comments__time"
+                                                          datetime="<?= $comment['date_add'] ?>"><?= format_publication_date($comment['date_add']) ?></time>
                                                 </div>
                                                 <p class="comments__text">
                                                     <?= $comment['message'] ?>
@@ -132,13 +137,13 @@
                                         </li>
                                     <?php endforeach; ?>
                                 </ul>
-                                <?php if($comments_length > 2 && count($comments) <= 2): ?>
+                                <?php if ($comments_length > 2 && count($comments) <= 2): ?>
                                     <a
-                                        class="comments__more-link"
-                                        href="<?= $to('post', [
-                                            'ID' => $post_id,
-                                            'show_comments' => ''
-                                        ]) ?>" >
+                                            class="comments__more-link"
+                                            href="<?= $to('post', [
+                                                'ID' => $post_id,
+                                                'show_comments' => ''
+                                            ]) ?>">
                                         <span>Показать все комментарии</span>
                                         <sup class="comments__amount"><?= $comments_length - 2 ?></sup>
                                     </a>
@@ -150,15 +155,19 @@
                 <div class="post-details__user user">
                     <div class="post-details__user-info user__info">
                         <div class="post-details__avatar user__avatar">
-                            <a class="post-details__avatar-link user__avatar-link" href="<?= $to('profile', ['user_id' => $author_info['id']]) ?>">
-                                <img class="post-details__picture user__picture" src="<?= $author_info['avatar'] ?>" alt="Аватар пользователя">
+                            <a class="post-details__avatar-link user__avatar-link"
+                               href="<?= $to('profile', ['user_id' => $author_info['id']]) ?>">
+                                <img class="post-details__picture user__picture" src="<?= $author_info['avatar'] ?>"
+                                     alt="Аватар пользователя">
                             </a>
                         </div>
                         <div class="post-details__name-wrapper user__name-wrapper">
-                            <a class="post-details__name user__name" href="<?= $to('profile', ['user_id' => $author_info['id']]) ?>">
+                            <a class="post-details__name user__name"
+                               href="<?= $to('profile', ['user_id' => $author_info['id']]) ?>">
                                 <span><?= $author_info['user_name'] ?? $author_info['login'] ?></span>
                             </a>
-                            <time class="post-details__time user__time" datetime="2014-03-20"><?= format_register_date($author_info['date_add']) ?></time>
+                            <time class="post-details__time user__time"
+                                  datetime="2014-03-20"><?= format_register_date($author_info['date_add']) ?></time>
                         </div>
                     </div>
                     <div class="post-details__rating user__rating">
@@ -171,30 +180,31 @@
                             <span class="post-details__rating-text user__rating-text"><?= get_text_count_publications($author_info['count_posts']) ?></span>
                         </p>
                     </div>
-                    <?php if($author_info['id'] != $user['id']): ?>
+                    <?php if ($author_info['id'] != $user['id']): ?>
                         <div class="post-details__user-buttons user__buttons">
                             <?php
                             $your_subscribe = $check_subs($author_info['id']);
                             ?>
 
-                            <?php if($your_subscribe): ?>
+                            <?php if ($your_subscribe): ?>
                                 <a
-                                    href="<?= $to('subscription', [
-                                        'user_id' => $author_info['id'],
-                                        'follower_id' => $user['id'],
-                                        'action' => 'remove'
-                                    ]) ?>"
-                                    class="user__button user__button--subscription button button--quartz">Отписаться</a>
+                                        href="<?= $to('subscription', [
+                                            'user_id' => $author_info['id'],
+                                            'follower_id' => $user['id'],
+                                            'action' => 'remove'
+                                        ]) ?>"
+                                        class="user__button user__button--subscription button button--quartz">Отписаться</a>
                             <?php else: ?>
                                 <a
-                                    href="<?= $to('subscription', [
-                                        'user_id' => $author_info['id'],
-                                        'follower_id' => $user['id'],
-                                        'action' => 'add'
-                                    ]) ?>"
-                                    class="user__button user__button--subscription button button--main">Подписаться</a>
+                                        href="<?= $to('subscription', [
+                                            'user_id' => $author_info['id'],
+                                            'follower_id' => $user['id'],
+                                            'action' => 'add'
+                                        ]) ?>"
+                                        class="user__button user__button--subscription button button--main">Подписаться</a>
                             <?php endif; ?>
-                            <a class="user__button user__button--writing button button--green" href="<?= $to('messages', ['user' => $author_info['id']]) ?>">Сообщение</a>
+                            <a class="user__button user__button--writing button button--green"
+                               href="<?= $to('messages', ['user' => $author_info['id']]) ?>">Сообщение</a>
                         </div>
                     <?php endif; ?>
                 </div>

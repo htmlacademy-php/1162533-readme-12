@@ -14,7 +14,7 @@ init_check_auth('/');
 
 $validations = [
     'content_id' => [
-        function ($name) {
+        function () {
             $value = filter_input(INPUT_GET, 'content_id', FILTER_VALIDATE_INT);
 
             if (!$value) {
@@ -24,7 +24,7 @@ $validations = [
         }
     ],
     'page' => [
-        function ($name) {
+        function () {
             $value = filter_input(INPUT_GET, 'page', FILTER_VALIDATE_INT);
 
             if (!$value) {
@@ -34,7 +34,7 @@ $validations = [
         }
     ],
     'sort_type' => [
-        function ($name) {
+        function () {
             $value = filter_input(INPUT_GET, 'sort_type', FILTER_SANITIZE_STRING);
 
             if (!$value) {
@@ -45,7 +45,7 @@ $validations = [
         }
     ],
     'sort_direction' => [
-        function ($name) {
+        function () {
             $value = filter_input(INPUT_GET, 'sort_direction', FILTER_SANITIZE_STRING);
             $value = $value === 'ASC' ? 'ASC' : 'DESC';
 
@@ -60,7 +60,7 @@ $values = $validation_result['values'];
 $active_type_content_id = $values['content_id'];
 $page = $values['page'];
 $sort_type = $values['sort_type'];
-$sort_direction =$values['sort_direction'];
+$sort_direction = $values['sort_direction'];
 
 $con = get_db_connection();
 $user = init_get_user();
@@ -79,7 +79,7 @@ $popular_posts = get_popular_posts(
     $offset);
 $popular_posts_count = get_popular_posts_count($con, $active_type_content_id);
 
-$get_sort_link = function($sort) use ($active_type_content_id, $sort_type, $sort_direction, $utils_url_to) {
+$get_sort_link = function ($sort) use ($active_type_content_id, $sort_type, $sort_direction, $utils_url_to) {
     $direction = $sort_type == $sort ? ($sort_direction === 'ASC' ? 'DESC' : 'ASC') : $sort_direction;
 
     return $utils_url_to('popular', [
@@ -89,8 +89,7 @@ $get_sort_link = function($sort) use ($active_type_content_id, $sort_type, $sort
     ]);
 };
 
-$check_is_liked_post = function($post_id) use ($con, $user)
-{
+$check_is_liked_post = function ($post_id) use ($con, $user) {
     return check_liked_post($con, $post_id, $user);
 };
 

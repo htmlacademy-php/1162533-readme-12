@@ -9,8 +9,9 @@ define('MYSQL_DB_NAME', 'readme');
  * Подключение к базе данных
  * @return mysqli
  */
-function get_db_connection() {
-    $con = mysqli_connect(MYSQL_HOST, MYSQL_USER, MYSQL_PASSWORD,MYSQL_DB_NAME);
+function get_db_connection()
+{
+    $con = mysqli_connect(MYSQL_HOST, MYSQL_USER, MYSQL_PASSWORD, MYSQL_DB_NAME);
     mysqli_set_charset($con, "utf8");
 
     if ($con == false) {
@@ -26,7 +27,8 @@ function get_db_connection() {
  * @param mysqli $con
  * @return array
  */
-function get_post_content_types($con) {
+function get_post_content_types($con)
+{
     $sql_content_type = "SELECT * FROM content_type";
     $result_content_type = mysqli_query($con, $sql_content_type);
     $content_types = [];
@@ -44,7 +46,8 @@ function get_post_content_types($con) {
  * @param number $active_type_content_id айди выбранного типа контента
  * @return array
  */
-function get_popular_posts($con, $active_type_content_id, $sort_type, $sort_direction, $limit, $offset) {
+function get_popular_posts($con, $active_type_content_id, $sort_type, $sort_direction, $limit, $offset)
+{
     $active_type_content_id = $active_type_content_id ? $active_type_content_id : 1;
     $sql_post_popular = "
 SELECT
@@ -88,12 +91,14 @@ ORDER BY ";
     $stmt = db_get_prepare_stmt(
         $con,
         $sql_post_popular,
-        [$active_type_content_id,
+        [
+            $active_type_content_id,
             $active_type_content_id,
             $active_type_content_id,
             $active_type_content_id,
             $limit,
-            $offset]);
+            $offset
+        ]);
     mysqli_stmt_execute($stmt);
     $result_popular_post = mysqli_stmt_get_result($stmt);
 
@@ -102,7 +107,9 @@ ORDER BY ";
     }
 
     return $popular_posts;
-};
+}
+
+;
 
 /**
  * Получение количества популярных постов
@@ -110,7 +117,8 @@ ORDER BY ";
  * @param int $active_type_content_id айди выбранного типа контента
  * @return int
  */
-function get_popular_posts_count($con, $active_type_content_id) {
+function get_popular_posts_count($con, $active_type_content_id)
+{
     $active_type_content_id = $active_type_content_id ? $active_type_content_id : 1;
 
     $sql_post_popular = "
@@ -129,7 +137,9 @@ OR
     $result = mysqli_stmt_get_result($stmt);
 
     return $result ? mysqli_fetch_assoc($result)['count'] : 0;
-};
+}
+
+;
 
 /**
  * Получение информации определенного поста
@@ -137,7 +147,8 @@ OR
  * @param int $post_id айди выбранного поста
  * @return array
  */
-function get_post($con, $post_id) {
+function get_post($con, $post_id)
+{
     $sql_post = "
 SELECT
     p.id,
@@ -166,7 +177,9 @@ WHERE p.id = ?";
     $result_post = mysqli_stmt_get_result($stmt);
 
     return $result_post ? mysqli_fetch_assoc($result_post) : [];
-};
+}
+
+;
 
 /**
  * Получение хэштегов для поста
@@ -174,7 +187,8 @@ WHERE p.id = ?";
  * @param int $post_id айди выбранного поста
  * @return array
  */
-function get_post_hashtags($con, $post_id) {
+function get_post_hashtags($con, $post_id)
+{
     $sql_hashtags = "SELECT ph.hashtag_id, h.title FROM posthashtag ph JOIN hashtag h ON ph.hashtag_id = h.id WHERE ph.post_id = ?";
     $stmt = db_get_prepare_stmt(
         $con,
@@ -184,7 +198,9 @@ function get_post_hashtags($con, $post_id) {
     $result_hashtags = mysqli_stmt_get_result($stmt);
 
     return $result_hashtags ? mysqli_fetch_all($result_hashtags, MYSQLI_ASSOC) : [];
-};
+}
+
+;
 
 /**
  * Получение информации об авторе поста
@@ -192,7 +208,8 @@ function get_post_hashtags($con, $post_id) {
  * @param int $author_id айди автора поста
  * @return array
  */
-function get_info_about_post_author($con, $author_id) {
+function get_info_about_post_author($con, $author_id)
+{
     $sql_author_info = "
 SELECT
    *,
@@ -209,7 +226,9 @@ GROUP BY u.id";
     $result_author_info = mysqli_stmt_get_result($stmt);
 
     return $result_author_info ? mysqli_fetch_assoc($result_author_info) : [];
-};
+}
+
+;
 
 /**
  * Получение комментариев к посту
@@ -217,7 +236,8 @@ GROUP BY u.id";
  * @param int $post_id айди поста
  * @return array
  */
-function get_comments_for_post($con, $post_id) {
+function get_comments_for_post($con, $post_id)
+{
     $sql_comments = "
 SELECT
     c.id,
@@ -239,7 +259,9 @@ ORDER BY c.date_add ASC";
     $result_comments = mysqli_stmt_get_result($stmt);
 
     return $result_comments ? mysqli_fetch_all($result_comments, MYSQLI_ASSOC) : [];
-};
+}
+
+;
 
 /**
  * Получение данных пользователя по его email
@@ -247,7 +269,8 @@ ORDER BY c.date_add ASC";
  * @param string $user_email email пользователя
  * @return array
  */
-function get_user_data($con, $user_email) {
+function get_user_data($con, $user_email)
+{
     $sql = "SELECT * FROM user WHERE email = ?";
     $stmt = db_get_prepare_stmt(
         $con,
@@ -257,7 +280,9 @@ function get_user_data($con, $user_email) {
     $result = mysqli_stmt_get_result($stmt);
 
     return $result ? mysqli_fetch_assoc($result) : [];
-};
+}
+
+;
 
 /**
  * Получение постов для пользователя
@@ -266,7 +291,8 @@ function get_user_data($con, $user_email) {
  * @param int $active_type_content_id айди активного типа контента
  * @return array
  */
-function get_posts_for_me($con, $user_id, $active_type_content_id = 1) {
+function get_posts_for_me($con, $user_id, $active_type_content_id = 1)
+{
     $sql_posts = "
 SELECT
     p.id,
@@ -302,12 +328,15 @@ ORDER BY p.date_add DESC;";
             $active_type_content_id,
             $active_type_content_id,
             $active_type_content_id,
-            $user_id]);
+            $user_id
+        ]);
     mysqli_stmt_execute($stmt);
     $result_posts = mysqli_stmt_get_result($stmt);
 
     return $result_posts ? mysqli_fetch_all($result_posts, MYSQLI_ASSOC) : [];
-};
+}
+
+;
 
 /**
  * Получение постов по ключевому слову
@@ -315,7 +344,8 @@ ORDER BY p.date_add DESC;";
  * @param string $search_value значение по которому производится поиск
  * @return array
  */
-function get_search_results($con, $search_value) {
+function get_search_results($con, $search_value)
+{
     $sql = "SELECT
     p.*,
     u.login,
@@ -336,7 +366,9 @@ WHERE MATCH(p.title, p.content) AGAINST(?)";
     $result = mysqli_stmt_get_result($stmt);
 
     return $result ? mysqli_fetch_all($result, MYSQLI_ASSOC) : [];
-};
+}
+
+;
 
 /**
  * Получение постов по хэштегу
@@ -344,7 +376,8 @@ WHERE MATCH(p.title, p.content) AGAINST(?)";
  * @param string $search_value значение по которому производится поиск
  * @return array
  */
-function get_search_hashtag_results($con, $search_value) {
+function get_search_hashtag_results($con, $search_value)
+{
     $sql = "SELECT
     p.*,
     u.login,
@@ -366,7 +399,9 @@ ORDER BY p.date_add DESC";
     $result = mysqli_stmt_get_result($stmt);
 
     return $result ? mysqli_fetch_all($result, MYSQLI_ASSOC) : [];
-};
+}
+
+;
 
 /**
  * Получение списка постов принадлежащих пользователю
@@ -374,7 +409,8 @@ ORDER BY p.date_add DESC";
  * @param int $user_id айди пользователя
  * @return array
  */
-function get_user_posts($con, $user_id) {
+function get_user_posts($con, $user_id)
+{
     $sql = "SELECT post.*,
 content_type.class_name AS content_type_title,
 user.login as origin_author_post,
@@ -393,7 +429,9 @@ WHERE user_id = ?";
     $result = mysqli_stmt_get_result($stmt);
 
     return $result ? mysqli_fetch_all($result, MYSQLI_ASSOC) : [];
-};
+}
+
+;
 
 /**
  * Отправка комментария в бд
@@ -401,10 +439,11 @@ WHERE user_id = ?";
  * @param array $values данные с формы (сообщение, айди пользователя, айди поста)
  * @return int айди нового комментария
  */
-function send_comment($con, $values) {
+function send_comment($con, $values)
+{
     $post = get_post($con, $values['post']);
 
-    if(!empty($post)) {
+    if (!empty($post)) {
         $data = [
             'message' => $values['message'],
             'user_id' => $values['user'],
@@ -428,7 +467,9 @@ function send_comment($con, $values) {
         mysqli_stmt_get_result($stmt);
         return mysqli_insert_id($con);
     }
-};
+}
+
+;
 
 /**
  * Проверка подписки одного пользователя на другого
@@ -437,7 +478,8 @@ function send_comment($con, $values) {
  * @param int $follower_id айди пользователя, который подписан
  * @return array
  */
-function check_subscription($con, $user_id, $follower_id) {
+function check_subscription($con, $user_id, $follower_id)
+{
     $sql = "SELECT id FROM subscription WHERE user_id = ? AND follower_id = ?";
     $stmt = db_get_prepare_stmt(
         $con,
@@ -447,7 +489,9 @@ function check_subscription($con, $user_id, $follower_id) {
     $result = mysqli_stmt_get_result($stmt);
 
     return $result ? mysqli_fetch_assoc($result) : [];
-};
+}
+
+;
 
 /**
  * Меняет подписку (добавляет или удаляет)
@@ -455,7 +499,8 @@ function check_subscription($con, $user_id, $follower_id) {
  * @param array $values значения с формы (айди пользователя на которого подписываются, действие, айди пользователя который подписывается)
  * @return bool вовзращает true, если пользователь подписывается, и false если отписывается
  */
-function change_subscription($con, $values) {
+function change_subscription($con, $values)
+{
     $sql_user = "SELECT id FROM user WHERE id = ?";
     $stmt_user = db_get_prepare_stmt(
         $con,
@@ -486,14 +531,15 @@ function change_subscription($con, $values) {
 
         if ($result_user && $result_subscription) {
             mysqli_query($con, "COMMIT");
-        }
-        else {
+        } else {
             mysqli_query($con, "ROLLBACK");
         }
 
         return mysqli_stmt_errno($stmt_subscription) == 0 AND $values['action'] == 'add';
     }
-};
+}
+
+;
 
 /**
  * Проверка лайка авторизованного пользователя на посте
@@ -502,7 +548,8 @@ function change_subscription($con, $values) {
  * @param int $post_id айди поста
  * @return array
  */
-function check_like($con, $user_id, $post_id) {
+function check_like($con, $user_id, $post_id)
+{
     $sql = "SELECT id FROM likes WHERE user_id = ? AND post_id = ?";
     $stmt = db_get_prepare_stmt(
         $con,
@@ -512,7 +559,9 @@ function check_like($con, $user_id, $post_id) {
     $result = mysqli_stmt_get_result($stmt);
 
     return $result ? mysqli_fetch_assoc($result) : [];
-};
+}
+
+;
 
 /**
  * Выполнение запросов на добавление/удаления лайка с поста
@@ -520,10 +569,11 @@ function check_like($con, $user_id, $post_id) {
  * @param array $values массив значений айди поста и айди пользователя
  * @return bool
  */
-function change_likes($con, $values) {
+function change_likes($con, $values)
+{
     $post = get_post($con, $values['post_id']);
 
-    if(!empty($post)) {
+    if (!empty($post)) {
         $like = check_like($con, $values['user_id'], $values['post_id']);
         $sql = !empty($like) ? "DELETE FROM likes WHERE user_id = ? AND post_id = ?" : "INSERT INTO likes SET user_id = ?, post_id = ?";
 
@@ -535,7 +585,9 @@ function change_likes($con, $values) {
         mysqli_stmt_get_result($stmt);
         return mysqli_stmt_errno($stmt) == 0;
     }
-};
+}
+
+;
 
 /**
  * Возвращает список лайков
@@ -543,7 +595,8 @@ function change_likes($con, $values) {
  * @param int $user_id айди пользователя
  * @return array
  */
-function get_likes_list($con, $user_id) {
+function get_likes_list($con, $user_id)
+{
     $sql = "SELECT likes.*,
 user.id, user.login, user.avatar, post.content,
 (SELECT title FROM content_type WHERE content_type.id = post.content_type_id) as content_type
@@ -560,7 +613,9 @@ ORDER BY likes.date_add DESC";
     $result = mysqli_stmt_get_result($stmt);
 
     return $result ? mysqli_fetch_all($result, MYSQLI_ASSOC) : [];
-};
+}
+
+;
 
 /**
  * Возвращает список пользователей, на которых подписан выбранный пользователь
@@ -568,7 +623,8 @@ ORDER BY likes.date_add DESC";
  * @param int $user_id айди пользователя
  * @return array
  */
-function get_user_subscriptions($con, $user_id) {
+function get_user_subscriptions($con, $user_id)
+{
     $sql = "SELECT ss.*, u.id as user_id, u.date_add as user_date_add, u.avatar, u.login,
 (SELECT COUNT(post.id) FROM post WHERE post.user_id = ss.user_id) as post_count,
 (SELECT COUNT(subscription.id) FROM subscription WHERE subscription.user_id = ss.user_id) as subscription_count
@@ -583,7 +639,9 @@ function get_user_subscriptions($con, $user_id) {
     $result = mysqli_stmt_get_result($stmt);
 
     return $result ? mysqli_fetch_all($result, MYSQLI_ASSOC) : [];
-};
+}
+
+;
 
 /**
  * Возвращает информацию определенного пользователя
@@ -591,7 +649,8 @@ function get_user_subscriptions($con, $user_id) {
  * @param int $user_id айди пользователя
  * @return array
  */
-function get_user_info($con, $user_id) {
+function get_user_info($con, $user_id)
+{
     $sql = "SELECT login, email, avatar FROM user WHERE id = ?";
     $stmt = db_get_prepare_stmt(
         $con,
@@ -601,7 +660,9 @@ function get_user_info($con, $user_id) {
     $result = mysqli_stmt_get_result($stmt);
 
     return $result ? mysqli_fetch_assoc($result) : [];
-};
+}
+
+;
 
 /**
  * Возвращает список подписчиков
@@ -609,7 +670,8 @@ function get_user_info($con, $user_id) {
  * @param int $user_id айди пользователя
  * @return array
  */
-function get_followers($con, $user_id) {
+function get_followers($con, $user_id)
+{
     $sql = "SELECT follower_id, email, login
 FROM subscription
 JOIN user ON user.id = follower_id
@@ -630,7 +692,8 @@ WHERE user_id = ?";
  * @param int $user_id айди пользователя
  * @return array
  */
-function get_message_users($con, $user_id) {
+function get_message_users($con, $user_id)
+{
     $sql = "SELECT
         grps.user_id,
         login,
@@ -662,7 +725,9 @@ function get_message_users($con, $user_id) {
     $result = mysqli_stmt_get_result($stmt);
 
     return $result ? mysqli_fetch_all($result, MYSQLI_ASSOC) : [];
-};
+}
+
+;
 
 /**
  * Возвращает количество непрочитанных сообщений для конкретного получателя
@@ -670,7 +735,8 @@ function get_message_users($con, $user_id) {
  * @param int $user_id айди пользователя (получатель)
  * @return int
  */
-function get_unreaded_messages_count($con, $user_id) {
+function get_unreaded_messages_count($con, $user_id)
+{
     $sql = "SELECT COUNT(message.id) AS messages_count FROM message WHERE recipient_id = ? AND was_read = 0";
     $stmt = db_get_prepare_stmt(
         $con,
@@ -680,7 +746,9 @@ function get_unreaded_messages_count($con, $user_id) {
     $result = mysqli_stmt_get_result($stmt);
 
     return $result ? mysqli_fetch_assoc($result)['messages_count'] : 0;
-};
+}
+
+;
 
 /**
  * Возвращает список сообщений для конкретных отправителя и получателя
@@ -689,7 +757,8 @@ function get_unreaded_messages_count($con, $user_id) {
  * @param int $owner_id айди пользователя (получатель или отправитель)
  * @return array
  */
-function get_messages($con, $user_id, $owner_id) {
+function get_messages($con, $user_id, $owner_id)
+{
     $sql = "SELECT message.*, avatar, login
 FROM message
 JOIN user ON user.id = message.sender_id
@@ -702,7 +771,9 @@ WHERE (sender_id = ? AND recipient_id = ?) OR (sender_id = ? AND recipient_id = 
     $result = mysqli_stmt_get_result($stmt);
 
     return $result ? mysqli_fetch_all($result, MYSQLI_ASSOC) : [];
-};
+}
+
+;
 
 /**
  * Добавляет новое сообщение в бд
@@ -711,7 +782,8 @@ WHERE (sender_id = ? AND recipient_id = ?) OR (sender_id = ? AND recipient_id = 
  * @param int $sender_id айди отправителя
  * @param int $recipient_id айди получателя
  */
-function send_message($con, $content, $sender_id, $recipient_id) {
+function send_message($con, $content, $sender_id, $recipient_id)
+{
     $sql_user = "SELECT id from user WHERE id = ?";
     $stmt_user = db_get_prepare_stmt(
         $con,
@@ -721,7 +793,7 @@ function send_message($con, $content, $sender_id, $recipient_id) {
     $result_user = mysqli_stmt_get_result($stmt_user);
     $user_id = $result_user ? mysqli_fetch_assoc($result_user) : null;
 
-    if($result_user && $user_id['id'] !== $sender_id) {
+    if ($result_user && $user_id['id'] !== $sender_id) {
         $sql = "INSERT INTO message SET content = ?, sender_id = ?, recipient_id = ?";
         $stmt = db_get_prepare_stmt(
             $con,
@@ -730,7 +802,9 @@ function send_message($con, $content, $sender_id, $recipient_id) {
         mysqli_stmt_execute($stmt);
         mysqli_stmt_get_result($stmt);
     }
-};
+}
+
+;
 
 /**
  * Обновляе статус прочтения сообщения на прочтено
@@ -738,7 +812,8 @@ function send_message($con, $content, $sender_id, $recipient_id) {
  * @param int $recipient_id айди получателя
  * @param int $sender_id айди отправителя
  */
-function read_messages($con, $recipient_id, $sender_id) {
+function read_messages($con, $recipient_id, $sender_id)
+{
     $sql = "UPDATE message SET was_read = 1 WHERE sender_id = ? AND recipient_id = ?";
     $stmt = db_get_prepare_stmt(
         $con,
@@ -746,7 +821,9 @@ function read_messages($con, $recipient_id, $sender_id) {
         [$sender_id, $recipient_id]);
     mysqli_stmt_execute($stmt);
     mysqli_stmt_get_result($stmt);
-};
+}
+
+;
 
 /**
  * Возвращает id добавленного поста
@@ -813,7 +890,9 @@ function save_post($con, $post, $post_type_id, $user_id, $file_url = null)
     mysqli_stmt_execute($stmt);
     mysqli_stmt_get_result($stmt);
     return mysqli_insert_id($con);
-};
+}
+
+;
 
 /**
  * Сохраняет хэштеги в бд
@@ -858,7 +937,9 @@ function save_tags($con, $hashtags, $post_id)
             mysqli_stmt_get_result($stmt_post_hashtags);
         }
     }
-};
+}
+
+;
 
 /**
  * Проверяет существование email в бд
@@ -866,7 +947,8 @@ function save_tags($con, $hashtags, $post_id)
  * @param string $email email введенный пользователем при попытке регистрации
  * @return bool
  */
-function check_email_in_db($con, $email) {
+function check_email_in_db($con, $email)
+{
     $sql = "SELECT id, email FROM user WHERE email = ?";
     $stmt = db_get_prepare_stmt(
         $con,
@@ -880,7 +962,9 @@ function check_email_in_db($con, $email) {
     }
 
     return false;
-};
+}
+
+;
 
 /**
  * Добавляет нового пользователя в бд
@@ -917,7 +1001,35 @@ function register_user($con, $post, $file_url = null)
     mysqli_stmt_execute($stmt);
     mysqli_stmt_get_result($stmt);
     return mysqli_insert_id($con);
-};
+}
+
+;
+
+/**
+ * Проверяет что пользователь с таким email существует в базе
+ * @param mysqli $con
+ * @param string $email email пользователя при авторизации
+ * @return bool
+ */
+function check_user_email($con, $email)
+{
+    $sql = "SELECT id FROM user WHERE email = ?";
+    $stmt = db_get_prepare_stmt(
+        $con,
+        $sql,
+        [$email]);
+    mysqli_stmt_execute($stmt);
+    $result = mysqli_stmt_get_result($stmt);
+    $user_data = mysqli_fetch_all($result, MYSQLI_ASSOC);
+
+    if ($result && !empty($user_data)) {
+        return true;
+    }
+
+    return false;
+}
+
+;
 
 /**
  * Проверяет данные пользователя в бд при его авторизации на сайте
@@ -942,7 +1054,9 @@ function check_user_author_data($con, $email, $password)
     }
 
     return false;
-};
+}
+
+;
 
 /**
  * Возвращает название иконки исходя из того, поставил польсозователь лайе на данный пост или нет
@@ -954,7 +1068,9 @@ function check_user_author_data($con, $email, $password)
 function check_liked_post($con, $post_id, $user): string
 {
     return !empty(check_like($con, $user['id'], $post_id)) ? 'icon-heart-active' : 'icon-heart';
-};
+}
+
+;
 
 
 /**
@@ -993,4 +1109,6 @@ function save_repost_post($con, $post)
     mysqli_stmt_execute($stmt);
     mysqli_stmt_get_result($stmt);
     return mysqli_insert_id($con);
-};
+}
+
+;

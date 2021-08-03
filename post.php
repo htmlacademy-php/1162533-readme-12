@@ -13,17 +13,17 @@ init_check_auth('/');
 
 $validations = [
     'ID' => [
-        function ($name) {
+        function () {
             $value = filter_input(INPUT_GET, 'ID', FILTER_VALIDATE_INT);
 
             if (!$value) {
-                $value = NULL;
+                $value = null;
             }
             return validation_result($value);
         }
     ],
     'show_comments' => [
-        function ($name) {
+        function () {
             $is_parameter = isset($_GET['show_comments']);
 
             return validation_result($is_parameter);
@@ -60,13 +60,11 @@ if ($values['ID'] &&
     $comments = array_slice($comments, 0, 2);
 }
 
-$check_is_liked_post = function($post_id) use ($con, $user)
-{
+$check_is_liked_post = function ($post_id) use ($con, $user) {
     return check_liked_post($con, $post_id, $user);
 };
 
-$check_subs = function ($user_id) use ($con, $user)
-{
+$check_subs = function ($user_id) use ($con, $user) {
     return !empty(check_subscription($con, $user_id, $user['id']));
 };
 

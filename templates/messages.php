@@ -4,16 +4,17 @@
         <h2 class="visually-hidden">Сообщения</h2>
         <div class="messages__contacts">
             <ul class="messages__contacts-list tabs__list">
-                <?php if(!empty($message_users)): ?>
+                <?php if (!empty($message_users)): ?>
                     <?php foreach ($message_users as $message_user): ?>
                         <li class="messages__contacts-item <?= !$message_user['was_read'] && $message_user['sender_id'] !== $user['id'] ? 'messages__contacts-item--new' : '' ?>">
                             <a
-                                class="messages__contacts-tab tabs__item
+                                    class="messages__contacts-tab tabs__item
                                 <?= $active_dialog === $message_user['user_id'] ? 'messages__contacts-tab--active tabs__item--active' : '' ?>"
-                                href="<?= $to('messages', ['user' => $message_user['user_id']]) ?>">
+                                    href="<?= $to('messages', ['user' => $message_user['user_id']]) ?>">
                                 <div class="messages__avatar-wrapper">
-                                    <img class="messages__avatar" src="<?= $message_user['avatar'] ?>" alt="Аватар пользователя">
-                                    <?php if($message_user['unreaded_messages_count']): ?>
+                                    <img class="messages__avatar" src="<?= $message_user['avatar'] ?>"
+                                         alt="Аватар пользователя">
+                                    <?php if ($message_user['unreaded_messages_count']): ?>
                                         <i class="messages__indicator"><?= htmlspecialchars($message_user['unreaded_messages_count']) ?></i>
                                     <?php endif; ?>
                                 </div>
@@ -25,7 +26,8 @@
                                         <p class="messages__preview-text">
                                             <?= htmlspecialchars($message_user['content']) ?>
                                         </p>
-                                        <time class="messages__preview-time" datetime="<?= $message_user['last_message'] ?>">
+                                        <time class="messages__preview-time"
+                                              datetime="<?= $message_user['last_message'] ?>">
                                             <?= get_message_sent_time($message_user['last_message']); ?>
                                         </time>
                                     </div>
@@ -37,20 +39,23 @@
             </ul>
         </div>
         <div class="messages__chat">
-            <?php if($active_dialog): ?>
+            <?php if ($active_dialog): ?>
                 <div class="messages__chat-wrapper">
-                    <?php if(!empty($message_list)): ?>
+                    <?php if (!empty($message_list)): ?>
                         <ul class="messages__list tabs__content tabs__content--active">
                             <?php foreach ($message_list as $message): ?>
                                 <li class="messages__item <?= $message['sender_id'] == $user['id'] ? 'messages__item--my' : '' ?>">
                                     <div class="messages__info-wrapper">
                                         <div class="messages__item-avatar">
-                                            <a class="messages__author-link" href="<?= $to('profile', ['user_id' => $message['sender_id']]) ?>">
-                                                <img class="messages__avatar" src="<?= $message['avatar'] ?>" alt="Аватар пользователя">
+                                            <a class="messages__author-link"
+                                               href="<?= $to('profile', ['user_id' => $message['sender_id']]) ?>">
+                                                <img class="messages__avatar" src="<?= $message['avatar'] ?>"
+                                                     alt="Аватар пользователя">
                                             </a>
                                         </div>
                                         <div class="messages__item-info">
-                                            <a class="messages__author" href="<?= $to('profile', ['user_id' => $message['sender_id']]) ?>">
+                                            <a class="messages__author"
+                                               href="<?= $to('profile', ['user_id' => $message['sender_id']]) ?>">
                                                 <?= htmlspecialchars($message['login']) ?>
                                             </a>
                                             <time class="messages__time" datetime="<?= $message['date_add'] ?>">
@@ -71,10 +76,10 @@
                 </div>
                 <div class="comments">
                     <form
-                        class="comments__form form"
-                        action="<?= $to('messages', ['user' => $active_dialog]) ?>"
-                        method="post">
-                        <input type="hidden" name="recipient_id" value="<?= $active_dialog ?>" />
+                            class="comments__form form"
+                            action="<?= $to('messages', ['user' => $active_dialog]) ?>"
+                            method="post">
+                        <input type="hidden" name="recipient_id" value="<?= $active_dialog ?>"/>
                         <div class="comments__my-avatar">
                             <img class="comments__picture" src="<?= $user['avatar'] ?>" alt="Аватар пользователя">
                         </div>
@@ -84,7 +89,7 @@
                               placeholder="Ваше сообщение"><?= get_post_val('message') ?></textarea>
                             <label class="visually-hidden">Ваше сообщение</label>
 
-                            <?php if(!empty($errors) && $errors['message']): ?>
+                            <?php if (!empty($errors) && $errors['message']): ?>
                                 <button class="form__error-button button" type="button">!</button>
                                 <div class="form__error-text">
                                     <h3 class="form__error-title">Ошибка валидации</h3>
@@ -96,7 +101,7 @@
                     </form>
                 </div>
             <?php else: ?>
-            <p>Выберите диалог, чтобы начать переписку.</p>
+                <p>Выберите диалог, чтобы начать переписку.</p>
             <?php endif; ?>
         </div>
     </section>

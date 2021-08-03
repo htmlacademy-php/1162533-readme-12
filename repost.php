@@ -13,7 +13,7 @@ $user = init_get_user();
 
 $validations_params = [
     'ID' => [
-        function ($name) {
+        function () {
             $value = filter_input(INPUT_GET, 'ID', FILTER_VALIDATE_INT);
 
             if (!$value) {
@@ -30,7 +30,7 @@ $values = $validation_result['values'];
 $post_id = $values['ID'];
 $post_info = get_post($con, $post_id);
 
-if(!empty($post_info)) {
+if (!empty($post_info)) {
     $post_info['origin_author'] = $post_info['user_id'];
     $post_info['user_id'] = $user['id'];
     $post_info['repost'] = 1;

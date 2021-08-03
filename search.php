@@ -12,7 +12,7 @@ init_check_auth('/');
 
 $validations = [
     'search' => [
-        function ($name) {
+        function () {
             $value = filter_input(INPUT_GET, 'search', FILTER_SANITIZE_STRING);
 
             if (!$value) {
@@ -47,8 +47,7 @@ if ($search_query_text) {
     }
 }
 
-$check_is_liked_post = function($post_id) use ($con, $user)
-{
+$check_is_liked_post = function ($post_id) use ($con, $user) {
     return check_liked_post($con, $post_id, $user);
 };
 
