@@ -42,7 +42,9 @@ function format_publication_date($date)
     }
 
     return '';
-};
+}
+
+;
 
 /**
  * Возвращает страницу "не найдено"
@@ -104,7 +106,9 @@ function format_register_date($date)
     }
 
     return '';
-};
+}
+
+;
 
 /**
  * Возвращает количество подписчиков  в нужном формате
@@ -114,7 +118,9 @@ function format_register_date($date)
 function get_text_count_followers($count)
 {
     return get_noun_plural_form($count, 'подписчик', 'подписчика', 'подписчиков');
-};
+}
+
+;
 
 /**
  * Возвращает количество публикаций в нужном формате
@@ -124,7 +130,9 @@ function get_text_count_followers($count)
 function get_text_count_publications($count)
 {
     return get_noun_plural_form($count, 'публикация', 'публикации', 'публикаций');
-};
+}
+
+;
 
 /**
  * Возвращает количество просмотров в нужном формате
@@ -134,7 +142,9 @@ function get_text_count_publications($count)
 function get_text_count_shown($count)
 {
     return $count . " " . get_noun_plural_form($count, 'просмотр', 'просмотра', 'просмотров');
-};
+}
+
+;
 
 /**
  * Возвращает значение поля
@@ -144,7 +154,9 @@ function get_text_count_shown($count)
 function get_post_val($name)
 {
     return !empty($_POST) && !empty($_POST[$name]) ? htmlspecialchars($_POST[$name]) : '';
-};
+}
+
+;
 
 /**
  * Возвращает ссылку на загруженный файл, который был получен по ссылке
@@ -156,7 +168,7 @@ function upload_file($file_url, $path)
 {
     $image_content = file_get_contents($file_url);
     $file_name = basename($file_url);
-    $file_path = __DIR__ . $path;
+    $file_path = realpath(__DIR__ . '/..') . $path;
 
     if (!file_exists($file_path)) {
         mkdir($file_path, 0777, true);
@@ -164,8 +176,10 @@ function upload_file($file_url, $path)
 
     file_put_contents($file_path . $file_name, $image_content);
 
-    return $path .  $file_name;
-};
+    return $path . $file_name;
+}
+
+;
 
 /**
  * Возвращает ссылку на загруженный файл
@@ -176,16 +190,20 @@ function upload_file($file_url, $path)
 function save_image($file, $path)
 {
     $file_name = $file['name'];
-    $file_path = __DIR__ . $path;
+    $file_path = realpath(__DIR__ . '/..') . $path;
 
     if (!file_exists($file_path)) {
         mkdir($file_path, 0777, true);
     }
 
-    move_uploaded_file($file['tmp_name'], $file_path . $file_name);
+    if (move_uploaded_file($file['tmp_name'], $file_path . $file_name)) {
+        return $path . $file_name;
+    }
 
-    return $path . $file_name;
-};
+    return '';
+}
+
+;
 
 /**
  * Обрезает строку и добавляет ссылку Читать далее, если ее длина превышает заданный лимит символов
@@ -214,8 +232,11 @@ function cut_text($text, $url_to, $count_symbols = 300)
         $new_word_list[] = $word;
     }
 
-    return '<p>' . implode(' ', $new_word_list) . '</p>' . '<a class="post-text__more-link" href="' . $url_to . '">Читать далее</a>';
-};
+    return '<p>' . implode(' ',
+            $new_word_list) . '</p>' . '<a class="post-text__more-link" href="' . $url_to . '">Читать далее</a>';
+}
+
+;
 
 /**
  * Возвращает домен ссылки
@@ -225,7 +246,9 @@ function cut_text($text, $url_to, $count_symbols = 300)
 function get_domain($url)
 {
     return parse_url($url)['host'] ?? $url;
-};
+}
+
+;
 
 /**
  * Возвращает ссылку на превью видео
@@ -235,8 +258,10 @@ function get_domain($url)
 function get_youtube_video_miniature(string $youtube_url): string
 {
     $id = extract_youtube_id($youtube_url);
-    return 'http://img.youtube.com/vi/'.$id.'/0.jpg';
-};
+    return 'http://img.youtube.com/vi/' . $id . '/0.jpg';
+}
+
+;
 
 /**
  * Возвращает ссылку с заданными параметрами
@@ -244,8 +269,7 @@ function get_youtube_video_miniature(string $youtube_url): string
  * @param array $get
  * @return string
  */
-$utils_url_to = function (string $where, array $get = []): string
-{
+$utils_url_to = function (string $where, array $get = []): string {
     $result = '/' . trim($where, '/') . '.php';
     $params = [];
 
@@ -333,14 +357,17 @@ MESS;
 
         return $result;
     }
-};
+}
+
+;
 
 /**
  * Вовзращает дату последнего полученного сообщения в заданном формате
  * @param date $date дата сообщения
  * @return string
  */
-function get_message_sent_time($date) {
+function get_message_sent_time($date)
+{
 
     if (!$date) {
         return '';
@@ -350,7 +377,9 @@ function get_message_sent_time($date) {
     $cur_date = date_create("now");
     $diff = date_diff($cur_date, date_create($date))->days;
     return $diff > 0 ? date_format(date_create($date), 'd F') : date_format(date_create($date), 'H:m');
-};
+}
+
+;
 
 /**
  * Redirect browser to same page
@@ -365,12 +394,14 @@ function init_redirect_to_referer()
  * Создает транспорт сообщений
  * @return object
  */
-function create_transport_messages() {
+function create_transport_messages()
+{
     $transport = (new Swift_SmtpTransport('smtp.mail.ru', 465))
         ->setUsername('readme1162533@mail.ru')
         ->setPassword('22tYrpRIupM^')
-        ->setEncryption('SSL')
-    ;
+        ->setEncryption('SSL');
 
     return new Swift_Mailer($transport);
-};
+}
+
+;

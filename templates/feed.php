@@ -14,7 +14,8 @@
                                    href="<?= $to('profile', ['user_id' => $post['user_id']]) ?>"
                                    title="Автор">
                                     <div class="post__avatar-wrapper">
-                                        <img class="post__author-avatar" src="<?= htmlspecialchars($post['avatar']) ?>" alt="Аватар пользователя" width="60" height="60">
+                                        <img class="post__author-avatar" src="<?= htmlspecialchars($post['avatar']) ?>"
+                                             alt="Аватар пользователя" width="60" height="60">
                                     </div>
                                     <div class="post__info">
                                         <b class="post__author-name"><?= $post['user_name'] ? htmlspecialchars($post['user_name']) : htmlspecialchars($post['login']) ?></b>
@@ -29,18 +30,23 @@
                                         ><?= htmlspecialchars($post['title']) ?></a>
                                     </h2>
                                     <div class="post-photo__image-wrapper">
-                                        <img src="<?= htmlspecialchars($post['content']) ?>" alt="Фото от пользователя" width="760" height="396">
+                                        <img src="<?= htmlspecialchars($post['content']) ?>" alt="Фото от пользователя"
+                                             width="760" height="396">
                                     </div>
-                                <?php elseif($post['type'] === 'post-text'): ?>
-                                    <h2><a href="<?= $to('post', ['ID' => $post['id']]) ?>"><?= $post['title'] ?></a></h2>
-                                    <?= cut_text(htmlspecialchars($post['content']), $to('post', ['ID' => $post['id']])) ?>
-                                <?php elseif($post['type'] === 'post-video'): ?>
+                                <?php elseif ($post['type'] === 'post-text'): ?>
+                                    <h2><a href="<?= $to('post', ['ID' => $post['id']]) ?>"><?= $post['title'] ?></a>
+                                    </h2>
+                                    <?= cut_text(htmlspecialchars($post['content']),
+                                        $to('post', ['ID' => $post['id']])) ?>
+                                <?php elseif ($post['type'] === 'post-video'): ?>
                                     <div class="post-video__block">
                                         <div class="post-video__preview">
-                                            <?=embed_youtube_cover(htmlspecialchars($post['content']), 760, 393); ?>
+                                            <?= embed_youtube_cover(htmlspecialchars($post['content']), 760, 393); ?>
                                         </div>
                                         <div class="post-video__control">
-                                            <button class="post-video__play post-video__play--paused button button--video" type="button"><span class="visually-hidden">Запустить видео</span></button>
+                                            <button class="post-video__play post-video__play--paused button button--video"
+                                                    type="button"><span class="visually-hidden">Запустить видео</span>
+                                            </button>
                                             <div class="post-video__scale-wrapper">
                                                 <div class="post-video__scale">
                                                     <div class="post-video__bar">
@@ -48,7 +54,9 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                            <button class="post-video__fullscreen post-video__fullscreen--inactive button button--video" type="button"><span class="visually-hidden">Полноэкранный режим</span></button>
+                                            <button class="post-video__fullscreen post-video__fullscreen--inactive button button--video"
+                                                    type="button"><span
+                                                        class="visually-hidden">Полноэкранный режим</span></button>
                                         </div>
                                         <button class="post-video__play-big button" type="button">
                                             <svg class="post-video__play-big-icon" width="27" height="28">
@@ -57,18 +65,20 @@
                                             <span class="visually-hidden">Запустить проигрыватель</span>
                                         </button>
                                     </div>
-                                <?php elseif($post['type'] === 'post-quote'): ?>
+                                <?php elseif ($post['type'] === 'post-quote'): ?>
                                     <blockquote>
                                         <p>
                                             <?= htmlspecialchars($post['content']) ?>
                                         </p>
                                         <cite><?= htmlspecialchars($post['author']) ?></cite>
                                     </blockquote>
-                                <?php elseif($post['type'] === 'post-link'): ?>
+                                <?php elseif ($post['type'] === 'post-link'): ?>
                                     <div class="post-link__wrapper">
-                                        <a class="post-link__external" href="<?= htmlspecialchars($post['content']) ?>" title="Перейти по ссылке">
+                                        <a class="post-link__external" href="<?= htmlspecialchars($post['content']) ?>"
+                                           title="Перейти по ссылке">
                                             <div class="post-link__icon-wrapper">
-                                                <img src="https://www.google.com/s2/favicons?domain=<?= get_domain($post['content']) ?>" alt="Иконка">
+                                                <img src="https://www.google.com/s2/favicons?domain=<?= get_domain($post['content']) ?>"
+                                                     alt="Иконка">
                                             </div>
                                             <div class="post-link__info">
                                                 <h3><?= htmlspecialchars($post['title']) ?></h3>
@@ -84,12 +94,12 @@
                             <footer class="post__footer post__indicators">
                                 <div class="post__buttons">
                                     <a
-                                        class="post__indicator post__indicator--likes button"
-                                        href="<?= $to('likes', [
-                                            'post_id' => $post['id'],
-                                            'user_id' => $actual_user_id
-                                        ]) ?>"
-                                        title="Лайк">
+                                            class="post__indicator post__indicator--likes button"
+                                            href="<?= $to('likes', [
+                                                'post_id' => $post['id'],
+                                                'user_id' => $actual_user_id
+                                            ]) ?>"
+                                            title="Лайк">
                                         <svg class="post__indicator-icon" width="20" height="17">
                                             <use xlink:href="#<?= $check_is_liked_post($post['id']) ?>"></use>
                                         </svg>
@@ -105,7 +115,8 @@
                                         <span><?= $post['comments_count'] ?></span>
                                         <span class="visually-hidden">количество комментариев</span>
                                     </a>
-                                    <a class="post__indicator post__indicator--repost button" href="<?= $to('repost', ['ID' => $post['id']]) ?>" title="Репост">
+                                    <a class="post__indicator post__indicator--repost button"
+                                       href="<?= $to('repost', ['ID' => $post['id']]) ?>" title="Репост">
                                         <svg class="post__indicator-icon" width="19" height="17">
                                             <use xlink:href="#icon-repost"></use>
                                         </svg>
@@ -121,10 +132,10 @@
             <ul class="feed__filters filters">
                 <?php foreach ($content_types as $key => $type): ?>
                     <li
-                        class="feed__filters-item filters__item">
+                            class="feed__filters-item filters__item">
                         <a class="button filters__button filters__button--<?= $type['title'] ?>
                         <?= $active_type_content_id == $type['id'] ? 'filters__button--active' : '' ?>"
-                        href="<?= $to('feed', ['content_id' =>$type['id']]) ?>">
+                           href="<?= $to('feed', ['content_id' => $type['id']]) ?>">
                             <?php if ($type['title'] !== 'all'): ?>
                                 <span class="visually-hidden"><?= $type['label'] ?></span>
                                 <svg class="filters__icon" width="22" height="18">

@@ -20,7 +20,7 @@ $title = 'readme: профиль';
 
 $validations = [
     'user_id' => [
-        function ($name) use ($user) {
+        function () use ($user) {
             $value = filter_input(INPUT_GET, 'user_id', FILTER_VALIDATE_INT);
 
             if (!$value) {
@@ -30,7 +30,7 @@ $validations = [
         }
     ],
     'tab' => [
-        function ($name) {
+        function () {
             $value = filter_input(INPUT_GET, 'tab', FILTER_SANITIZE_STRING);
 
             if (!$value) {
@@ -40,7 +40,7 @@ $validations = [
         }
     ],
     'post_id' => [
-        function ($name) {
+        function () {
             $value = filter_input(INPUT_GET, 'post_id', FILTER_VALIDATE_INT);
 
             if (!$value) {
@@ -50,21 +50,21 @@ $validations = [
         }
     ],
     'all_comments' => [
-        function ($name) {
+        function () {
             $is_parameter = isset($_GET['all_comments']);
 
             return validation_result($is_parameter);
         }
     ],
     'show_comments' => [
-        function ($name) {
+        function () {
             $is_parameter = isset($_GET['show_comments']);
 
             return validation_result($is_parameter);
         }
     ],
     'add_comment' => [
-        function ($name) {
+        function () {
             $value = filter_input(INPUT_POST, 'add_comment', FILTER_SANITIZE_STRING);
 
             if (!$value) {
@@ -74,7 +74,7 @@ $validations = [
         }
     ],
     'post' => [
-        function ($name) {
+        function () {
             $value = filter_input(INPUT_POST, 'post', FILTER_VALIDATE_INT);
 
             if (!$value) {
@@ -84,7 +84,7 @@ $validations = [
         }
     ],
     'user' => [
-        function ($name) {
+        function () {
             $value = filter_input(INPUT_POST, 'user', FILTER_VALIDATE_INT);
 
             if (!$value) {
@@ -105,17 +105,15 @@ $is_subscription = $is_your_profile ? false : !empty(check_subscription($con, $u
 $user_info = get_info_about_post_author($con, $user_id);
 $user_posts = get_user_posts($con, $user_id);
 $likes_list = get_likes_list($con, $user_id);
-$subscriptions_list = get_user_subscriptions($con ,$user_id);
+$subscriptions_list = get_user_subscriptions($con, $user_id);
 $error_post_comment = 0;
 $unreaded_dialogs_count = get_unreaded_messages_count($con, $user['id']);
 
-$post_hashtags = function($post_id) use($con)
-{
+$post_hashtags = function ($post_id) use ($con) {
     return get_post_hashtags($con, $post_id);
 };
 
-$post_comments = function($post_id) use($con, $error_post_comment, $values)
-{
+$post_comments = function ($post_id) use ($con, $error_post_comment, $values) {
     $comments = get_comments_for_post($con, $post_id);
 
     if ($error_post_comment > 0) {
@@ -140,8 +138,7 @@ $post_comments = function($post_id) use($con, $error_post_comment, $values)
     ];
 };
 
-$check_show_comments = function($post_id) use($values)
-{
+$check_show_comments = function ($post_id) use ($values) {
     if ($values['post_id'] &&
         $values['post_id'] == $post_id &&
         $values['show_comments']) {
@@ -151,13 +148,11 @@ $check_show_comments = function($post_id) use($values)
     return false;
 };
 
-$check_is_liked_post = function($post_id) use ($con, $user)
-{
+$check_is_liked_post = function ($post_id) use ($con, $user) {
     return check_liked_post($con, $post_id, $user);
 };
 
-$check_subs = function ($user_id) use ($con, $user)
-{
+$check_subs = function ($user_id) use ($con, $user) {
     return !empty(check_subscription($con, $user_id, $user['id']));
 };
 

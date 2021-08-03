@@ -8,9 +8,15 @@
  * @param string $message
  * @return array
  */
-function validation_result($value = null, bool $result = true, string $message = 'ok'): array {
+function validation_result($value = null, bool $result = true, string $message = 'ok', string $key = ''): array
+{
+    if ($key) {
+        return ['is_valid' => $result, 'message' => $message, 'value' => $value, 'key' => $key];
+    }
     return ['is_valid' => $result, 'message' => $message, 'value' => $value];
-};
+}
+
+;
 
 /**
  * Run validation functions
@@ -19,7 +25,8 @@ function validation_result($value = null, bool $result = true, string $message =
  * @param array $error_field_titles
  * @return array
  */
-function validation_validate(array $form_validations, array $error_field_titles = []): array {
+function validation_validate(array $form_validations, array $error_field_titles = []): array
+{
     $errors = [];
     $values = [];
 
@@ -29,7 +36,7 @@ function validation_validate(array $form_validations, array $error_field_titles 
 
             if (!$result['is_valid']) {
                 $errors += [
-                    $key => [
+                    $result['key'] ?? $key => [
                         'title' => $error_field_titles[$key] ?? 'Incorrect value',
                         'message' => $result['message'],
                     ]
@@ -40,7 +47,9 @@ function validation_validate(array $form_validations, array $error_field_titles 
     }
 
     return ['errors' => $errors, 'values' => $values];
-};
+}
+
+;
 
 /**
  * Run validation about field completion
@@ -48,13 +57,16 @@ function validation_validate(array $form_validations, array $error_field_titles 
  * @param string $name
  * @return array
  */
-function validate_filled($name) {
+function validate_filled($name)
+{
     if (empty(trim($_POST[$name]))) {
         return validation_result(null, false, 'Это поле должно быть заполнено');
     }
 
     return validation_result($_POST[$name]);
-};
+}
+
+;
 
 /**
  * Run validation hashtags
@@ -62,7 +74,8 @@ function validate_filled($name) {
  * @param string $name
  * @return array
  */
-function validate_hashtags($name) {
+function validate_hashtags($name)
+{
     if (empty($_POST[$name])) {
         return validation_result($_POST[$name]);
     } else {
@@ -85,7 +98,9 @@ function validate_hashtags($name) {
     }
 
     return validation_result($_POST[$name]);
-};
+}
+
+;
 
 /**
  * Run validation uploaded photo OR photo link
@@ -94,16 +109,17 @@ function validate_hashtags($name) {
  * @param string $file_field
  * @return array
  */
-function validate_upload_photo($name, $file_field) {
+function validate_upload_photo($name, $file_field)
+{
     $valid_image_types = ['image/png', 'image/jpeg', 'image/jpg', 'image/gif'];
 
     if (empty($_POST[$name]) && (empty($_FILES[$file_field]) || $_FILES[$file_field]['error'] === 4)) {
         return validation_result(null, false, 'Вы должны загрузить фото, либо прикрепить ссылку из интернета');
-    } elseif(!empty($_POST[$name])) {
+    } elseif (!empty($_POST[$name])) {
         $tmp = explode('.', $_POST[$name]);
         $type = 'image/' . end($tmp);
 
-        if(!in_array($type, $valid_image_types)) {
+        if (!in_array($type, $valid_image_types)) {
             return validation_result(null, false, 'Неверный формат загружаемого файла.');
         }
 
@@ -113,7 +129,9 @@ function validate_upload_photo($name, $file_field) {
     }
 
     return validation_result([$name => ($_POST[$name] ?? null), $file_field => ($_FILES[$file_field] ?? null)]);
-};
+}
+
+;
 
 /**
  * Run validation url
@@ -121,13 +139,16 @@ function validate_upload_photo($name, $file_field) {
  * @param string $name
  * @return array
  */
-function validate_url($name) {
+function validate_url($name)
+{
     if ($_POST[$name] && !filter_var($_POST[$name], FILTER_VALIDATE_URL)) {
         return validation_result(null, false, 'Значение поля должно быть корректным URL-адресом');
     }
 
     return validation_result($_POST[$name]);
-};
+}
+
+;
 
 /**
  * Run validation youtube url
@@ -135,11 +156,13 @@ function validate_url($name) {
  * @param string $name
  * @return array
  */
-function validate_youtube($name) {
+function validate_youtube($name)
+{
     $url = $_POST[$name];
     $id = extract_youtube_id($url);
 
-    set_error_handler(function () {}, E_WARNING);
+    set_error_handler(function () {
+    }, E_WARNING);
     $headers = get_headers('https://www.youtube.com/oembed?format=json&url=http://www.youtube.com/watch?v=' . $id);
     restore_error_handler();
 
@@ -154,7 +177,9 @@ function validate_youtube($name) {
     }
 
     return validation_result($_POST[$name]);
-};
+}
+
+;
 
 /**
  * Run validation uploaded photo
@@ -162,7 +187,8 @@ function validate_youtube($name) {
  * @param string $name
  * @return array
  */
-function validate_photo($name) {
+function validate_photo($name)
+{
     if ($_FILES[$name] && $_FILES[$name]['error'] !== 4) {
         $file_type = $_FILES[$name]['type'];
 
@@ -172,11 +198,14 @@ function validate_photo($name) {
             return validation_result($_FILES[$name]);
         }
 
-        return validation_result(null, false, 'Неверный формат загружаемого файла. Допустимый формат: ' . implode(' , ', $valid_image_types));
+        return validation_result(null, false,
+            'Неверный формат загружаемого файла. Допустимый формат: ' . implode(' , ', $valid_image_types));
     }
 
     return validation_result($_FILES[$name]);
-};
+}
+
+;
 
 /**
  * Run validation email
@@ -184,13 +213,16 @@ function validate_photo($name) {
  * @param string $name
  * @return array
  */
-function validate_email($name) {
+function validate_email($name)
+{
     if ($_POST[$name] && !filter_var($_POST[$name], FILTER_VALIDATE_EMAIL)) {
         return validation_result(null, false, 'Значение поля должно быть корректным email-адресом');
     }
 
     return validation_result($_POST[$name]);
-};
+}
+
+;
 
 /**
  * Run validation password repeat
@@ -199,13 +231,16 @@ function validate_email($name) {
  * @param string $pass2
  * @return array
  */
-function validate_passwords_repeat($pass1, $pass2) {
+function validate_passwords_repeat($pass1, $pass2)
+{
     if ($_POST[$pass1] !== $_POST[$pass2]) {
         return validation_result(null, false, 'Пароли не совпадают');
     }
 
     return validation_result($_POST[$pass1]);
-};
+}
+
+;
 
 /**
  * Run validation password
@@ -213,7 +248,8 @@ function validate_passwords_repeat($pass1, $pass2) {
  * @param string $name
  * @return array
  */
-function validate_password($name) {
+function validate_password($name)
+{
     if (strlen($_POST[$name]) < 5) {
         return validation_result(null, false, 'Пароль должен состоять не менее чем из 5 символов');
     }
@@ -223,7 +259,9 @@ function validate_password($name) {
     }
 
     return validation_result($_POST[$name]);
-};
+}
+
+;
 
 /**
  * Run validation field length
@@ -232,10 +270,13 @@ function validate_password($name) {
  * @param number $length
  * @return array
  */
-function validate_length($name, $length) {
+function validate_length($name, $length)
+{
     if (strlen(trim($_POST[$name])) < $length) {
         return validation_result(null, false, 'Длина комментария должна быть больше четырех символов');
     }
 
     return validation_result($_POST[$name]);
-};
+}
+
+;

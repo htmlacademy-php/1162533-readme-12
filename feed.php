@@ -11,7 +11,7 @@ init_check_auth('/');
 
 $validations = [
     'content_id' => [
-        function ($name) {
+        function () {
             $value = filter_input(INPUT_GET, 'content_id', FILTER_VALIDATE_INT);
 
             if (!$value) {
@@ -34,8 +34,7 @@ $active_type_content_id = $values['content_id'];
 $posts = get_posts_for_me($con, $user['id'], $active_type_content_id);
 $unreaded_dialogs_count = get_unreaded_messages_count($con, $user['id']);
 
-$check_is_liked_post = function($post_id) use ($con, $user)
-{
+$check_is_liked_post = function ($post_id) use ($con, $user) {
     return check_liked_post($con, $post_id, $user);
 };
 

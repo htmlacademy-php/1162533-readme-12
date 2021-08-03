@@ -12,7 +12,7 @@ init_check_auth('/');
 
 $validations_parameters = [
     'active-tab' => [
-        function ($name) {
+        function () {
             $value = filter_input(INPUT_POST, 'active-tab', FILTER_SANITIZE_STRING);
             $value_tab = filter_input(INPUT_GET, 'tab', FILTER_SANITIZE_STRING);
 
@@ -63,15 +63,18 @@ $form_validations = [
             }
         ],
         'photo-url' => [
-            0 => function($name) {
+            0 => function ($name) {
                 return validate_url($name);
             },
-            1 => function($name) {
+            1 => function ($name) {
                 return validate_upload_photo($name, 'userpic-file-photo');
             },
-            2 => function($name) {
+            2 => function ($name) {
                 if (isset($_FILES['userpic-file-photo']) && $_FILES['userpic-file-photo']['error'] === 0) {
-                    return validation_result([$name => ($_POST[$name] ?? null), 'userpic-file-photo' => $_FILES['userpic-file-photo']]);
+                    return validation_result([
+                        $name => ($_POST[$name] ?? null),
+                        'userpic-file-photo' => $_FILES['userpic-file-photo']
+                    ]);
                 }
                 return validation_result([$name => ($_POST[$name] ?? null), 'userpic-file-photo' => null]);
             }
@@ -82,7 +85,7 @@ $form_validations = [
             }
         ],
         'userpic-file-photo' => [
-            0 => function($name) {
+            0 => function ($name) {
                 return validate_photo($name);
             }
         ]
@@ -97,10 +100,10 @@ $form_validations = [
             0 => function ($name) {
                 return validate_filled($name);
             },
-            1 => function($name) {
+            1 => function ($name) {
                 return validate_url($name);
             },
-            2 => function($name) {
+            2 => function ($name) {
                 return validate_youtube($name);
             }
         ],
@@ -159,7 +162,7 @@ $form_validations = [
             0 => function ($name) {
                 return validate_filled($name);
             },
-            1 => function($name) {
+            1 => function ($name) {
                 return validate_url($name);
             }
         ],
@@ -209,10 +212,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $post_type_id = $content_types[array_search($active_tab, array_column($content_types, 'title'))]['id'];
         $post_id = save_post($con, $values, $post_type_id, $user['id'], $file_url);
 
-        if($post_id) {
+        if ($post_id) {
             $follower_list = get_followers($con, $user['id']);
 
-            if(!empty($follower_list)) {
+            if (!empty($follower_list)) {
                 new_post_notification('readme1162533@mail.ru', $follower_list, $user, $_POST['post-heading'], $mailer);
             }
         }
@@ -226,11 +229,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
-$get_tabs_link = function($name) use($utils_url_to) {
+$get_tabs_link = function ($name) use ($utils_url_to) {
     return $utils_url_to('add', ['tab' => $name]);
 };
 
-$form_fields = include_template('adding-posts/adding-post-' . $active_tab  . '.php', [
+$form_fields = include_template('adding-posts/adding-post-' . $active_tab . '.php', [
     'active_tab' => $active_tab,
     'errors' => $errors
 ]);
