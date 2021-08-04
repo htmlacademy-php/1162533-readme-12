@@ -130,8 +130,10 @@
                                href="<?= $to('profile', ['user_id' => $post['user_id']]) ?>"
                                title="Автор">
                                 <div class="post__avatar-wrapper">
-                                    <img class="post__author-avatar" src="<?= $post['avatar'] ?>"
-                                         alt="Аватар пользователя">
+                                    <?php if($post['avatar']): ?>
+                                        <img class="post__author-avatar" src="<?= htmlspecialchars($post['avatar']) ?>"
+                                             alt="Аватар пользователя">
+                                    <?php endif; ?>
                                 </div>
                                 <div class="post__info">
                                     <b class="post__author-name"><?= $post['user_name'] ?? $post['login'] ?></b>

@@ -5,8 +5,10 @@
             <div class="profile__user user container">
                 <div class="profile__user-info user__info">
                     <div class="profile__avatar user__avatar">
-                        <img class="profile__picture user__picture" src="<?= $user_info['avatar'] ?>"
-                             alt="Аватар пользователя">
+                        <?php if($user_info['avatar']): ?>
+                            <img class="profile__picture user__picture" src="<?= $user_info['avatar'] ?>"
+                                 alt="Аватар пользователя">
+                        <?php endif; ?>
                     </div>
                     <div class="profile__name-wrapper user__name-wrapper">
                         <span class="profile__name user__name"><?= $user_info['login'] ?></span>
@@ -101,9 +103,11 @@
                                                     <a class="post__author-link" href="<?= $to('profile',
                                                         ['user_id' => $post['origin_author']]) ?>" title="Автор">
                                                         <div class="post__avatar-wrapper post__avatar-wrapper--repost">
-                                                            <img class="post__author-avatar"
-                                                                 src="<?= $post['origin_author_avatar'] ?>"
-                                                                 alt="Аватар пользователя">
+                                                            <?php if($post['origin_author_avatar']): ?>
+                                                                <img class="post__author-avatar"
+                                                                     src="<?= $post['origin_author_avatar'] ?>"
+                                                                     alt="Аватар пользователя">
+                                                            <?php endif; ?>
                                                         </div>
                                                         <div class="post__info">
                                                             <b class="post__author-name">Репост: <?= $post['origin_author_post'] ?></b>
@@ -256,9 +260,11 @@
                                                                         <a class="user__avatar-link"
                                                                            href="<?= $to('profile',
                                                                                ['user_id' => $comment['user_id']]) ?>">
-                                                                            <img class="comments__picture"
-                                                                                 src="<?= $comment['author_avatar'] ?>"
-                                                                                 alt="Аватар пользователя">
+                                                                            <?php if($comment['author_avatar']): ?>
+                                                                                <img class="comments__picture"
+                                                                                     src="<?= $comment['author_avatar'] ?>"
+                                                                                     alt="Аватар пользователя">
+                                                                            <?php endif; ?>
                                                                         </a>
                                                                     </div>
                                                                     <div class="comments__info">
@@ -305,8 +311,10 @@
                                                 <input type="hidden" name="user" value="<?= $actual_user_id ?>"/>
                                                 <input type="hidden" name="post" value="<?= $post['id'] ?>"/>
                                                 <div class="comments__my-avatar">
-                                                    <img class="comments__picture" src="<?= $actual_user_avatar ?>"
-                                                         alt="Аватар пользователя">
+                                                    <?php if($actual_user_avatar): ?>
+                                                        <img class="comments__picture" src="<?= $actual_user_avatar ?>"
+                                                             alt="Аватар пользователя">
+                                                    <?php endif; ?>
                                                 </div>
                                                 <div class="form__input-section <?= isset($errors['message']) ? 'form__input-section--error' : '' ?>">
                                             <textarea
@@ -347,8 +355,10 @@
                                                 <div class="post-mini__avatar user__avatar">
                                                     <a class="user__avatar-link"
                                                        href="<?= $to('profile', ['user_id' => $like['user_id']]) ?>">
-                                                        <img class="post-mini__picture user__picture"
-                                                             src="<?= $like['avatar'] ?>" alt="Аватар пользователя">
+                                                        <?php if($like['avatar']): ?>
+                                                            <img class="post-mini__picture user__picture"
+                                                                 src="<?= $like['avatar'] ?>" alt="Аватар пользователя">
+                                                        <?php endif; ?>
                                                     </a>
                                                 </div>
                                                 <div class="post-mini__name-wrapper user__name-wrapper">
@@ -424,9 +434,11 @@
                                                     <a class="user__avatar-link"
                                                        href="<?= $to('profile',
                                                            ['user_id' => $subscription['user_id']]) ?>">
-                                                        <img class="post-mini__picture user__picture"
-                                                             src="<?= $subscription['avatar'] ?>"
-                                                             alt="Аватар пользователя">
+                                                        <?php if($subscription['avatar']): ?>
+                                                            <img class="post-mini__picture user__picture"
+                                                                 src="<?= $subscription['avatar'] ?>"
+                                                                 alt="Аватар пользователя">
+                                                        <?php endif; ?>
                                                     </a>
                                                 </div>
                                                 <div class="post-mini__name-wrapper user__name-wrapper">
@@ -458,26 +470,28 @@
                                                 </p>
                                             </div>
                                             <div class="post-mini__user-buttons user__buttons">
-                                                <?php
-                                                $your_subscribe = $check_subs($subscription['user_id']);
-                                                ?>
+                                                <?php if($subscription['user_id'] !== $actual_user_id): ?>
+                                                    <?php
+                                                    $your_subscribe = $check_subs($subscription['user_id']);
+                                                    ?>
 
-                                                <?php if ($your_subscribe): ?>
-                                                    <a
-                                                            href="<?= $to('subscription', [
-                                                                'user_id' => $subscription['user_id'],
-                                                                'follower_id' => $actual_user_id,
-                                                                'action' => 'remove'
-                                                            ]) ?>"
-                                                            class="post-mini__user-button user__button user__button--subscription button button--quartz">Отписаться</a>
-                                                <?php else: ?>
-                                                    <a
-                                                            href="<?= $to('subscription', [
-                                                                'user_id' => $subscription['user_id'],
-                                                                'follower_id' => $actual_user_id,
-                                                                'action' => 'add'
-                                                            ]) ?>"
-                                                            class="post-mini__user-button user__button user__button--subscription button button--main">Подписаться</a>
+                                                    <?php if ($your_subscribe): ?>
+                                                        <a
+                                                                href="<?= $to('subscription', [
+                                                                    'user_id' => $subscription['user_id'],
+                                                                    'follower_id' => $actual_user_id,
+                                                                    'action' => 'remove'
+                                                                ]) ?>"
+                                                                class="post-mini__user-button user__button user__button--subscription button button--quartz">Отписаться</a>
+                                                    <?php else: ?>
+                                                        <a
+                                                                href="<?= $to('subscription', [
+                                                                    'user_id' => $subscription['user_id'],
+                                                                    'follower_id' => $actual_user_id,
+                                                                    'action' => 'add'
+                                                                ]) ?>"
+                                                                class="post-mini__user-button user__button user__button--subscription button button--main">Подписаться</a>
+                                                    <?php endif; ?>
                                                 <?php endif; ?>
                                             </div>
                                         </li>

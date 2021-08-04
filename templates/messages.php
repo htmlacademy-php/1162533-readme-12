@@ -12,8 +12,10 @@
                                 <?= $active_dialog === $message_user['user_id'] ? 'messages__contacts-tab--active tabs__item--active' : '' ?>"
                                     href="<?= $to('messages', ['user' => $message_user['user_id']]) ?>">
                                 <div class="messages__avatar-wrapper">
-                                    <img class="messages__avatar" src="<?= $message_user['avatar'] ?>"
-                                         alt="Аватар пользователя">
+                                    <?php if($message_user['avatar']): ?>
+                                        <img class="messages__avatar" src="<?= $message_user['avatar'] ?>"
+                                             alt="Аватар пользователя">
+                                    <?php endif; ?>
                                     <?php if ($message_user['unreaded_messages_count']): ?>
                                         <i class="messages__indicator"><?= htmlspecialchars($message_user['unreaded_messages_count']) ?></i>
                                     <?php endif; ?>
@@ -49,8 +51,10 @@
                                         <div class="messages__item-avatar">
                                             <a class="messages__author-link"
                                                href="<?= $to('profile', ['user_id' => $message['sender_id']]) ?>">
-                                                <img class="messages__avatar" src="<?= $message['avatar'] ?>"
-                                                     alt="Аватар пользователя">
+                                                <?php if($message['avatar']): ?>
+                                                    <img class="messages__avatar" src="<?= $message['avatar'] ?>"
+                                                         alt="Аватар пользователя">
+                                                <?php endif; ?>
                                             </a>
                                         </div>
                                         <div class="messages__item-info">
@@ -81,7 +85,9 @@
                             method="post">
                         <input type="hidden" name="recipient_id" value="<?= $active_dialog ?>"/>
                         <div class="comments__my-avatar">
-                            <img class="comments__picture" src="<?= $user['avatar'] ?>" alt="Аватар пользователя">
+                            <?php if($user['avatar']): ?>
+                                <img class="comments__picture" src="<?= $user['avatar'] ?>" alt="Аватар пользователя">
+                            <?php endif; ?>
                         </div>
                         <div class="form__input-section <?= !empty($errors) && $errors['message'] ? 'form__input-section--error' : '' ?>">
                     <textarea class="comments__textarea form__textarea form__input"

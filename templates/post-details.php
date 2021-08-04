@@ -89,7 +89,9 @@
                     <div class="comments">
                         <form class="comments__form form" action="<?= $to('post', ['ID' => $post_id]) ?>" method="post">
                             <div class="comments__my-avatar">
-                                <img class="comments__picture" src="<?= $user['avatar'] ?>" alt="Аватар пользователя">
+                                <?php if($user['avatar']): ?>
+                                    <img class="comments__picture" src="<?= $user['avatar'] ?>" alt="Аватар пользователя">
+                                <?php endif; ?>
                             </div>
                             <div class="form__input-section <?= !empty($errors) && $errors['message'] ? 'form__input-section--error' : '' ?>">
                                 <input type="hidden" name="user" value="<?= $user['id'] ?>"/>
@@ -116,9 +118,11 @@
                                             <div class="comments__avatar">
                                                 <a class="user__avatar-link"
                                                    href="<?= $to('profile', ['user_id' => $comment['user_id']]) ?>">
-                                                    <img class="comments__picture"
-                                                         src="<?= $comment['author_avatar'] ?>"
-                                                         alt="Аватар пользователя">
+                                                    <?php if($comment['author_avatar']): ?>
+                                                        <img class="comments__picture"
+                                                             src="<?= $comment['author_avatar'] ?>"
+                                                             alt="Аватар пользователя">
+                                                    <?php endif; ?>
                                                 </a>
                                             </div>
                                             <div class="comments__info">
@@ -157,8 +161,10 @@
                         <div class="post-details__avatar user__avatar">
                             <a class="post-details__avatar-link user__avatar-link"
                                href="<?= $to('profile', ['user_id' => $author_info['id']]) ?>">
-                                <img class="post-details__picture user__picture" src="<?= $author_info['avatar'] ?>"
-                                     alt="Аватар пользователя">
+                                <?php if($author_info['avatar']): ?>
+                                    <img class="post-details__picture user__picture" src="<?= $author_info['avatar'] ?>"
+                                         alt="Аватар пользователя">
+                                <?php endif; ?>
                             </a>
                         </div>
                         <div class="post-details__name-wrapper user__name-wrapper">

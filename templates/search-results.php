@@ -32,9 +32,11 @@
                                        href="<?= $to('profile', ['user_id' => $post['user_id']]) ?>"
                                        title="Автор">
                                         <div class="post__avatar-wrapper">
-                                            <img class="post__author-avatar"
-                                                 src="<?= htmlspecialchars($post['avatar']) ?>"
-                                                 alt="Аватар пользователя" width="60" height="60">
+                                            <?php if($post['avatar']): ?>
+                                                <img class="post__author-avatar"
+                                                     src="<?= htmlspecialchars($post['avatar']) ?>"
+                                                     alt="Аватар пользователя" width="60" height="60">
+                                            <?php endif; ?>
                                         </div>
                                         <div class="post__info">
                                             <b class="post__author-name"><?= $post['user_name'] ? htmlspecialchars($post['user_name']) : htmlspecialchars($post['login']) ?></b>

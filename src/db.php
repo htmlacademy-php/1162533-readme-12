@@ -128,7 +128,6 @@ WHERE
 OR
 ? = 1 AND p.content_type_id >= ?";
 
-    $count = 0;
     $stmt = db_get_prepare_stmt(
         $con,
         $sql_post_popular,
@@ -905,7 +904,6 @@ function save_tags($con, $hashtags, $post_id)
     $new_unique_hashtags = array_unique((explode(' ', htmlspecialchars($hashtags))));
     $sql_hashtags_db = "SELECT * FROM hashtag";
     $result_hashtags_db = mysqli_query($con, $sql_hashtags_db);
-    $hashtags_by_db = [];
 
     if ($result_hashtags_db) {
         $hashtags_by_db = mysqli_fetch_all($result_hashtags_db, MYSQLI_ASSOC);
