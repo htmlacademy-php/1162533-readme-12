@@ -1,4 +1,5 @@
 <?php
+
 require('src/init.php');
 require('src/helpers.php');
 require('src/utils.php');
@@ -73,7 +74,6 @@ $error_field_titles = [
 $errors = [];
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-
     $validation_result = validation_validate($form_validations, $error_field_titles);
     $errors = $validation_result['errors'];
     $values = $validation_result['values'];

@@ -7,7 +7,7 @@
                             id="cite-text"
                             name="cite-text"
                             placeholder="Текст цитаты"><?= get_post_val('cite-text') ?></textarea>
-        <?php if (!empty($errors) && !empty($errors['cite-text'])): ?>
+        <?php if (!empty($errors) && !empty($errors['cite-text'])) : ?>
             <button class="form__error-button button" type="button">!<span
                         class="visually-hidden">Информация об ошибке</span></button>
             <div class="form__error-text">
@@ -27,7 +27,7 @@
                 type="text"
                 name="quote-author"
                 value="<?= get_post_val('quote-author') ?>">
-        <?php if (!empty($errors) && !empty($errors['quote-author'])): ?>
+        <?php if (!empty($errors) && !empty($errors['quote-author'])) : ?>
             <button class="form__error-button button" type="button">!<span
                         class="visually-hidden">Информация об ошибке</span></button>
             <div class="form__error-text">

@@ -46,7 +46,7 @@
                     <a class="footer__copyright-link" href="#">
                         <span>Разработано HTML Academy</span>
                         <svg class="footer__copyright-logo" width="27" height="34">
-                            <use xlink:href="#icon-htmlacademy"></use>
+                            <use xlink:href="/img/sprite.svg#icon-htmlacademy"></use>
                         </svg>
                     </a>
                 </div>

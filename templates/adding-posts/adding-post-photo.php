@@ -8,7 +8,7 @@
                 name="photo-url"
                 value="<?= get_post_val('photo-url') ?>"
                 placeholder="Введите ссылку">
-        <?php if (!empty($errors) && $errors['photo-url']): ?>
+        <?php if (!empty($errors) && $errors['photo-url']) : ?>
             <button class="form__error-button button" type="button">!<span
                         class="visually-hidden">Информация об ошибке</span></button>
             <div class="form__error-text">

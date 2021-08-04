@@ -1,5 +1,4 @@
 <?php
-/* @var Closure $utils_url_to */
 
 require('src/init.php');
 require('src/helpers.php');
@@ -70,7 +69,6 @@ if ($active_dialog) {
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-
     $validation_result = validation_validate($form_validations, $error_field_titles);
     $errors = $validation_result['errors'];
     $values = $validation_result['values'];
@@ -86,8 +84,7 @@ $page_content = include_template('messages.php', [
     'active_dialog' => $active_dialog,
     'user' => $user,
     'message_list' => $message_list,
-    'errors' => $errors,
-    'to' => $utils_url_to
+    'errors' => $errors
 ]);
 
 $page = include_template('layout.php', [

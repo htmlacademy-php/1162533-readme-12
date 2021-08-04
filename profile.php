@@ -1,5 +1,4 @@
 <?php
-/* @var Closure $utils_url_to */
 /* @var Closure $post_hashtags */
 /* @var Closure $post_comments */
 /* @var Closure $check_show_comments */
@@ -186,7 +185,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if (empty($errors_form)) {
             send_comment($con, $_POST);
 
-            $href = $utils_url_to('profile', [
+            $href = utils_url_to('profile', [
                 'user_id' => $user_id,
                 'post_id' => $post_id,
                 'show_comments' => '',
@@ -218,8 +217,7 @@ $page_content = include_template('profile/profile.php', [
     'post_comments' => $post_comments,
     'check_show_comments' => $check_show_comments,
     'check_is_liked_post' => $check_is_liked_post,
-    'check_subs' => $check_subs,
-    'to' => $utils_url_to
+    'check_subs' => $check_subs
 ]);
 
 $page = include_template('layout.php', [

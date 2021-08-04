@@ -9,7 +9,7 @@
                 name="video-url"
                 value="<?= get_post_val('video-url') ?>"
                 placeholder="Введите ссылку">
-        <?php if (!empty($errors) && !empty($errors['video-url'])): ?>
+        <?php if (!empty($errors) && !empty($errors['video-url'])) : ?>
             <button class="form__error-button button" type="button">!<span
                         class="visually-hidden">Информация об ошибке</span></button>
             <div class="form__error-text">

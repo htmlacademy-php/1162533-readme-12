@@ -7,14 +7,16 @@
             <div class="adding-post__tabs-wrapper tabs">
                 <div class="adding-post__tabs filters">
                     <ul class="adding-post__tabs-list filters__list tabs__list">
-                        <?php foreach ($post_tabs as $key => $tab): ?>
+                        <?php foreach ($post_tabs as $key => $tab) : ?>
                             <li class="adding-post__tabs-item filters__item">
                                 <a class="adding-post__tabs-link filters__button
                                     filters__button--<?= $key ?>
-                                    <?= $active_tab === $key ? 'filters__button--active tabs__item tabs__item--active' : '' ?> button"
+                                    <?= $active_tab === $key
+                                    ? 'filters__button--active tabs__item tabs__item--active'
+                                    : '' ?> button"
                                    href="<?= $get_tabs_link($key) ?>">
                                     <svg class="filters__icon" width="22" height="18">
-                                        <use xlink:href="#icon-filter-<?= $key ?>"></use>
+                                        <use xlink:href="/img/sprite.svg#icon-filter-<?= $key ?>"></use>
                                     </svg>
                                     <span><?= $tab ?></span>
                                 </a>
@@ -31,7 +33,7 @@
     <div class="modal__wrapper">
         <button class="modal__close-button button" type="button">
             <svg class="modal__close-icon" width="18" height="18">
-                <use xlink:href="#icon-close"></use>
+                <use xlink:href="/img/sprite.svg#icon-close"></use>
             </svg>
             <span class="visually-hidden">Закрыть модальное окно</span></button>
         <div class="modal__content">

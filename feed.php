@@ -1,5 +1,4 @@
 <?php
-/* @var Closure $utils_url_to */
 
 require('src/init.php');
 require('src/db.php');
@@ -43,7 +42,6 @@ $page_content = include_template('feed.php', [
     'content_types' => $content_types,
     'posts' => $posts,
     'actual_user_id' => $user['id'],
-    'to' => $utils_url_to,
     'check_is_liked_post' => $check_is_liked_post
 ]);
 

@@ -1,5 +1,4 @@
 <?php
-/* @var Closure $utils_url_to */
 /* @var Closure $check_is_liked_post */
 
 require('src/init.php');
@@ -54,7 +53,6 @@ $check_is_liked_post = function ($post_id) use ($con, $user) {
 $page_content = include_template('search-results.php', [
     'search_query_text' => $search_query_text,
     'founded_posts' => $founded_posts,
-    'to' => $utils_url_to,
     'user' => $user,
     'check_is_liked_post' => $check_is_liked_post
 ]);

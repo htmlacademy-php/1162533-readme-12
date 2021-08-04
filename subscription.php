@@ -1,4 +1,5 @@
 <?php
+
 require('src/init.php');
 require('src/helpers.php');
 require('src/db.php');
@@ -12,7 +13,6 @@ if (!empty($_GET) &&
     !empty($_GET['user_id']) &&
     !empty($_GET['follower_id']) &&
     !empty($_GET['action'])) {
-
     if (change_subscription($con, $_GET)) {
         $recipient_info = get_user_info($con, $_GET['user_id']);
         new_follower_notification('readme1162533@mail.ru', $recipient_info, $user, $mailer);
@@ -20,5 +20,3 @@ if (!empty($_GET) &&
 }
 
 init_redirect_to_referer();
-
-

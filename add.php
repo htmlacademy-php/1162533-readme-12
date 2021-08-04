@@ -1,5 +1,4 @@
 <?php
-/* @var Closure $utils_url_to */
 /* @var Closure $get_tabs_link */
 
 require('src/init.php');
@@ -189,7 +188,6 @@ $error_field_titles = [
 $errors = [];
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-
     $validation_result = validation_validate($form_validations[$active_tab], $error_field_titles);
     $errors = $validation_result['errors'];
     $values = $validation_result['values'];
@@ -199,7 +197,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $file_url = null;
 
         if ($active_tab === 'photo') {
-
             $photo_path = '/uploads/';
 
             if (isset($values['photo-url']['userpic-file-photo'])) {
@@ -224,13 +221,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             save_tags($con, $values['post-tags'], $post_id);
         }
 
-        $URL = $utils_url_to('post', ['ID' => $post_id]);
+        $URL = utils_url_to('post', ['ID' => $post_id]);
         header("Location: $URL");
     }
 }
 
-$get_tabs_link = function ($name) use ($utils_url_to) {
-    return $utils_url_to('add', ['tab' => $name]);
+$get_tabs_link = function ($name) {
+    return utils_url_to('add', ['tab' => $name]);
 };
 
 $form_fields = include_template('adding-posts/adding-post-' . $active_tab . '.php', [

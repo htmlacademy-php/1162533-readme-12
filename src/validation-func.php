@@ -16,8 +16,6 @@ function validation_result($value = null, bool $result = true, string $message =
     return ['is_valid' => $result, 'message' => $message, 'value' => $value];
 }
 
-;
-
 /**
  * Run validation functions
  *
@@ -49,8 +47,6 @@ function validation_validate(array $form_validations, array $error_field_titles 
     return ['errors' => $errors, 'values' => $values];
 }
 
-;
-
 /**
  * Run validation about field completion
  *
@@ -65,8 +61,6 @@ function validate_filled($name)
 
     return validation_result($_POST[$name]);
 }
-
-;
 
 /**
  * Run validation hashtags
@@ -100,8 +94,6 @@ function validate_hashtags($name)
     return validation_result($_POST[$name]);
 }
 
-;
-
 /**
  * Run validation uploaded photo OR photo link
  *
@@ -131,8 +123,6 @@ function validate_upload_photo($name, $file_field)
     return validation_result([$name => ($_POST[$name] ?? null), $file_field => ($_FILES[$file_field] ?? null)]);
 }
 
-;
-
 /**
  * Run validation url
  *
@@ -147,8 +137,6 @@ function validate_url($name)
 
     return validation_result($_POST[$name]);
 }
-
-;
 
 /**
  * Run validation youtube url
@@ -179,8 +167,6 @@ function validate_youtube($name)
     return validation_result($_POST[$name]);
 }
 
-;
-
 /**
  * Run validation uploaded photo
  *
@@ -198,14 +184,15 @@ function validate_photo($name)
             return validation_result($_FILES[$name]);
         }
 
-        return validation_result(null, false,
-            'Неверный формат загружаемого файла. Допустимый формат: ' . implode(' , ', $valid_image_types));
+        return validation_result(
+            null,
+            false,
+            'Неверный формат загружаемого файла. Допустимый формат: ' . implode(' , ', $valid_image_types)
+        );
     }
 
     return validation_result($_FILES[$name]);
 }
-
-;
 
 /**
  * Run validation email
@@ -222,8 +209,6 @@ function validate_email($name)
     return validation_result($_POST[$name]);
 }
 
-;
-
 /**
  * Run validation password repeat
  *
@@ -239,8 +224,6 @@ function validate_passwords_repeat($pass1, $pass2)
 
     return validation_result($_POST[$pass1]);
 }
-
-;
 
 /**
  * Run validation password
@@ -261,8 +244,6 @@ function validate_password($name)
     return validation_result($_POST[$name]);
 }
 
-;
-
 /**
  * Run validation field length
  *
@@ -278,5 +259,3 @@ function validate_length($name, $length)
 
     return validation_result($_POST[$name]);
 }
-
-;

@@ -7,7 +7,7 @@
                             id="post-text"
                             name="post-text"
                             placeholder="Введите текст публикации"><?= get_post_val('post-text') ?></textarea>
-        <?php if (!empty($errors) && !empty($errors['post-text'])): ?>
+        <?php if (!empty($errors) && !empty($errors['post-text'])) : ?>
             <button class="form__error-button button" type="button">!<span
                         class="visually-hidden">Информация об ошибке</span></button>
             <div class="form__error-text">

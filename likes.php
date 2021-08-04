@@ -1,4 +1,5 @@
 <?php
+
 require('src/init.php');
 require('src/helpers.php');
 require('src/db.php');
@@ -15,5 +16,3 @@ if (!empty($_GET) &&
         print_r('Не получилось произвести действия с лайками');
     }
 }
-
-
