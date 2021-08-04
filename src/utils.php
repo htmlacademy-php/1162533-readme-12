@@ -1,6 +1,89 @@
 <?php
+define("POPULAR_POSTS_LIMIT", 9);
 define("SPACE_SYMBOL_COUNT", 1);
 define("ELLIPSIS_SYMBOL_COUNT", 3);
+
+/**
+ * @param array $user_data ['id' => int, 'user_name' => string, 'avatar' => string]
+ */
+function init_login(array $user_data, string $address): void
+{
+    $_SESSION['is_auth'] = 1;
+    $_SESSION['user_name'] = $user_data['login'];
+    $_SESSION['avatar'] = $user_data['avatar'];
+    $_SESSION['id'] = $user_data['id'];
+
+    init_redirect($address);
+}
+
+/**
+ * Что бы уменьшить вероятность конфликта в данных сессии лучше работать с конкретными параметрами
+ */
+function init_logout(string $address): void
+{
+    unset($_SESSION['is_auth'], $_SESSION['user_name'], $_SESSION['avatar'], $_SESSION['id']);
+    init_redirect($address);
+}
+
+function init_is_auth(): bool
+{
+    return !empty($_SESSION['is_auth'] ?? null);
+}
+
+/**
+ * @param string $address
+ * @return bool
+ */
+function init_check_auth(string $address = null): void
+{
+    if (!init_is_auth()) {
+        init_redirect($address);
+    }
+}
+
+/**
+ * @param string $address
+ * @return bool
+ */
+function init_check_not_auth(string $address): void
+{
+    if (init_is_auth()) {
+        init_redirect($address);
+    }
+}
+
+/**
+ * @return array
+ */
+function init_get_user(): array
+{
+    return [
+        'is_auth' => $_SESSION['is_auth'] ?? null,
+        'user_name' => $_SESSION['user_name'] ?? null,
+        'avatar' => $_SESSION['avatar'] ?? null,
+        'id' => $_SESSION['id'] ?? null,
+    ];
+}
+
+/**
+ * Возвращает число и склонение подписчиков
+ * @param int $count
+ * @return string
+ */
+function format_text_followers($count)
+{
+    return get_noun_plural_form($count, 'подписчик', 'подписчика', 'подписчиков');
+}
+
+/**
+ * Возвращает число и склонение публикаций
+ * @param int $count
+ * @return string
+ */
+function format_text_publications($count)
+{
+    return get_noun_plural_form($count, 'публикация', 'публикации', 'публикаций');
+}
 
 /**
  * Возвращает дату добавления записи в нужном формате
@@ -43,8 +126,6 @@ function format_publication_date($date)
 
     return '';
 }
-
-;
 
 /**
  * Возвращает страницу "не найдено"
@@ -108,8 +189,6 @@ function format_register_date($date)
     return '';
 }
 
-;
-
 /**
  * Возвращает количество подписчиков  в нужном формате
  * @param number $count
@@ -119,8 +198,6 @@ function get_text_count_followers($count)
 {
     return get_noun_plural_form($count, 'подписчик', 'подписчика', 'подписчиков');
 }
-
-;
 
 /**
  * Возвращает количество публикаций в нужном формате
@@ -132,8 +209,6 @@ function get_text_count_publications($count)
     return get_noun_plural_form($count, 'публикация', 'публикации', 'публикаций');
 }
 
-;
-
 /**
  * Возвращает количество просмотров в нужном формате
  * @param number $count
@@ -144,8 +219,6 @@ function get_text_count_shown($count)
     return $count . " " . get_noun_plural_form($count, 'просмотр', 'просмотра', 'просмотров');
 }
 
-;
-
 /**
  * Возвращает значение поля
  * @param string $name
@@ -155,8 +228,6 @@ function get_post_val($name)
 {
     return !empty($_POST) && !empty($_POST[$name]) ? htmlspecialchars($_POST[$name]) : '';
 }
-
-;
 
 /**
  * Возвращает ссылку на загруженный файл, который был получен по ссылке
@@ -179,8 +250,6 @@ function upload_file($file_url, $path)
     return $path . $file_name;
 }
 
-;
-
 /**
  * Возвращает ссылку на загруженный файл
  * @param array $file
@@ -202,8 +271,6 @@ function save_image($file, $path)
 
     return '';
 }
-
-;
 
 /**
  * Обрезает строку и добавляет ссылку Читать далее, если ее длина превышает заданный лимит символов
@@ -232,23 +299,21 @@ function cut_text($text, $url_to, $count_symbols = 300)
         $new_word_list[] = $word;
     }
 
-    return '<p>' . implode(' ',
-            $new_word_list) . '</p>' . '<a class="post-text__more-link" href="' . $url_to . '">Читать далее</a>';
+    return '<p>' . implode(
+        ' ',
+        $new_word_list
+    ) . '</p>' . '<a class="post-text__more-link" href="' . $url_to . '">Читать далее</a>';
 }
-
-;
 
 /**
  * Возвращает домен ссылки
  * @param string $url
  * @return string
  */
-function get_domain($url)
+function get_website_favicon($url)
 {
-    return parse_url($url)['host'] ?? $url;
+    return "https://www.google.com/s2/favicons?domain=" . parse_url($url)['host'] ?? $url;
 }
-
-;
 
 /**
  * Возвращает ссылку на превью видео
@@ -261,15 +326,14 @@ function get_youtube_video_miniature(string $youtube_url): string
     return 'http://img.youtube.com/vi/' . $id . '/0.jpg';
 }
 
-;
-
 /**
  * Возвращает ссылку с заданными параметрами
  * @param string $where
  * @param array $get
  * @return string
  */
-$utils_url_to = function (string $where, array $get = []): string {
+function utils_url_to(string $where, array $get = []): string
+{
     $result = '/' . trim($where, '/') . '.php';
     $params = [];
 
@@ -280,7 +344,7 @@ $utils_url_to = function (string $where, array $get = []): string {
     $result .= (count($params) > 0 ? '?' : '') . implode('&', $params);
 
     return $result;
-};
+}
 
 /**
  * Отправляет уведомлениe о новом подписчике
@@ -300,7 +364,9 @@ function new_follower_notification($sender, $recipient, $follower, $mailer)
     $user_name = $recipient['login'];
     $follower_name = $follower['user_name'];
     $follower_id = $follower['id'];
-    $link = !empty($_SERVER['HTTPS']) ? 'https' : 'http' . '://' . $_SERVER['HTTP_HOST'] . "/profile.php?user_id=" . $follower_id;
+    $link = !empty($_SERVER['HTTPS'])
+        ? 'https'
+        : 'http' . '://' . $_SERVER['HTTP_HOST'] . "/profile.php?user_id=" . $follower_id;
 
     $body = <<<MESS
 Здравствуйте, {$user_name}.
@@ -339,7 +405,9 @@ function new_post_notification($sender, $recipients, $author, $post_title, $mail
     foreach ($recipients as $recipient) {
         $author_name = $author['user_name'];
         $user_name = $recipient['login'];
-        $link = !empty($_SERVER['HTTPS']) ? 'https' : 'http' . '://' . $_SERVER['HTTP_HOST'] . "/profile.php?user_id=" . $author['id'];
+        $link = !empty($_SERVER['HTTPS'])
+            ? 'https'
+            : 'http' . '://' . $_SERVER['HTTP_HOST'] . "/profile.php?user_id=" . $author['id'];
         $body = <<<MESS
 Здравствуйте, {$user_name}.
 Пользователь {$author_name} только что опубликовал новую запись „{$post_title}“.
@@ -359,8 +427,6 @@ MESS;
     }
 }
 
-;
-
 /**
  * Вовзращает дату последнего полученного сообщения в заданном формате
  * @param date $date дата сообщения
@@ -379,8 +445,6 @@ function get_message_sent_time($date)
     return $diff > 0 ? date_format(date_create($date), 'd F') : date_format(date_create($date), 'H:m');
 }
 
-;
-
 /**
  * Redirect browser to same page
  */
@@ -389,6 +453,13 @@ function init_redirect_to_referer()
     init_redirect($_SERVER['HTTP_REFERER'] ?? '/');
 }
 
+/**
+ * Redirect browser to current page
+ */
+function init_redirect($address)
+{
+    Header('Location: ' . $address);
+}
 
 /**
  * Создает транспорт сообщений
@@ -403,5 +474,3 @@ function create_transport_messages()
 
     return new Swift_Mailer($transport);
 }
-
-;

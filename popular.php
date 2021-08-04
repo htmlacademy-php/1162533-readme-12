@@ -1,8 +1,5 @@
 <?php
-/* @var Closure $utils_url_to */
 /* @var Closure $get_sort_link */
-
-define("POPULAR_POSTS_LIMIT", 9);
 
 require('src/init.php');
 require('src/helpers.php');
@@ -76,13 +73,14 @@ $popular_posts = get_popular_posts(
     $sort_type,
     $sort_direction,
     POPULAR_POSTS_LIMIT,
-    $offset);
+    $offset
+);
 $popular_posts_count = get_popular_posts_count($con, $active_type_content_id);
 
-$get_sort_link = function ($sort) use ($active_type_content_id, $sort_type, $sort_direction, $utils_url_to) {
+$get_sort_link = function ($sort) use ($active_type_content_id, $sort_type, $sort_direction) {
     $direction = $sort_type == $sort ? ($sort_direction === 'ASC' ? 'DESC' : 'ASC') : $sort_direction;
 
-    return $utils_url_to('popular', [
+    return utils_url_to('popular', [
         'content_id' => $active_type_content_id,
         'sort_type' => $sort,
         'sort_direction' => $direction
@@ -103,7 +101,6 @@ $page_content = include_template('main.php', [
     'sort_type' => $sort_type,
     'sort_direction' => $sort_direction,
     'get_sort_link' => $get_sort_link,
-    'to' => $utils_url_to,
     'actual_user_id' => $user['id'],
     'check_is_liked_post' => $check_is_liked_post
 ]);

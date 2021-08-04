@@ -7,7 +7,9 @@
                 <div class="adding-post__input-wrapper form__input-wrapper">
                     <label class="adding-post__label form__label" for="post-heading">Заголовок <span
                                 class="form__input-required">*</span></label>
-                    <div class="form__input-section <?= !empty($errors['post-heading']) ? 'form__input-section--error' : '' ?>">
+                    <div class="form__input-section <?= !empty($errors['post-heading'])
+                        ? 'form__input-section--error'
+                        : '' ?>">
                         <input
                                 class="adding-post__input form__input"
                                 id="post-heading"
@@ -15,8 +17,9 @@
                                 name="post-heading"
                                 value="<?= get_post_val('post-heading') ?>"
                                 placeholder="Введите заголовок">
-                        <?php if (!empty($errors) && !empty($errors['post-heading'])): ?>
-                            <button class="form__error-button button" type="button">!<span class="visually-hidden">Информация об ошибке</span>
+                        <?php if (!empty($errors) && !empty($errors['post-heading'])) : ?>
+                            <button class="form__error-button button"
+                                    type="button">!<span class="visually-hidden">Информация об ошибке</span>
                             </button>
                             <div class="form__error-text">
                                 <h3 class="form__error-title">Заголовок сообщения</h3>
@@ -28,7 +31,9 @@
                 <?= $fields ?>
                 <div class="adding-post__input-wrapper form__input-wrapper">
                     <label class="adding-post__label form__label" for="post-tags">Теги</label>
-                    <div class="form__input-section <?= !empty($errors) && !empty($errors['post-tags']) ? 'form__input-section--error' : '' ?>">
+                    <div class="form__input-section <?= !empty($errors) && !empty($errors['post-tags'])
+                        ? 'form__input-section--error'
+                        : '' ?>">
                         <input
                                 class="adding-post__input form__input"
                                 id="post-tags"
@@ -36,8 +41,9 @@
                                 name="post-tags"
                                 value="<?= get_post_val('post-tags') ?>"
                                 placeholder="Введите теги">
-                        <?php if (!empty($errors) && !empty($errors['post-tags'])): ?>
-                            <button class="form__error-button button" type="button">!<span class="visually-hidden">Информация об ошибке</span>
+                        <?php if (!empty($errors) && !empty($errors['post-tags'])) : ?>
+                            <button class="form__error-button button"
+                                    type="button">!<span class="visually-hidden">Информация об ошибке</span>
                             </button>
                             <div class="form__error-text">
                                 <h3 class="form__error-title">Заголовок сообщения</h3>
@@ -47,18 +53,18 @@
                     </div>
                 </div>
             </div>
-            <?php if (!empty($errors)): ?>
+            <?php if (!empty($errors)) : ?>
                 <div class="form__invalid-block">
                     <b class="form__invalid-slogan">Пожалуйста, исправьте следующие ошибки:</b>
                     <ul class="form__invalid-list">
-                        <?php foreach ($errors as $error): ?>
+                        <?php foreach ($errors as $error) : ?>
                             <li class="form__invalid-item"><?= $error['title'] ?>. <?= $error['message'] ?></li>
                         <?php endforeach; ?>
                     </ul>
                 </div>
             <?php endif; ?>
         </div>
-        <?php if ($active_tab === 'photo'): ?>
+        <?php if ($active_tab === 'photo') : ?>
             <div class="adding-post__input-file-container form__input-container form__input-container--file">
                 <div class="adding-post__input-file-wrapper form__input-file-wrapper">
                     <div class="adding-post__file-zone adding-post__file-zone--photo form__file-zone dropzone">

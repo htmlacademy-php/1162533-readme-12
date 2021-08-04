@@ -8,7 +8,7 @@
                 type="text"
                 name="post-link"
                 value="<?= get_post_val('post-link') ?>">
-        <?php if (!empty($errors) && !empty($errors['post-link'])): ?>
+        <?php if (!empty($errors) && !empty($errors['post-link'])) : ?>
             <button class="form__error-button button" type="button">!<span
                         class="visually-hidden">Информация об ошибке</span></button>
             <div class="form__error-text">

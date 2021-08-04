@@ -1,5 +1,4 @@
 <?php
-/* @var Closure $utils_url_to */
 /* @var Closure $check_is_liked_post */
 /* @var Closure $check_subs */
 
@@ -83,7 +82,6 @@ $error_field_titles = [
 $errors = [];
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-
     $validation_result = validation_validate($form_validations, $error_field_titles);
     $errors = $validation_result['errors'];
     $values = $validation_result['values'];
@@ -100,7 +98,6 @@ $page_content = include_template('post-details.php', [
     'hashtags' => $hashtags,
     'comments' => $comments,
     'comments_length' => $comments_length,
-    'to' => $utils_url_to,
     'user' => $user,
     'check_is_liked_post' => $check_is_liked_post,
     'check_subs' => $check_subs,
